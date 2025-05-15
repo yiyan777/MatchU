@@ -3,13 +3,17 @@ import CoupleCarousel from "@/components/CoupleCarousel";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
+
 export default function Home() {
   return (
-    <div className="">
+    <div>
       <Navbar />
+
+      {/* 首頁大圖 */}
       <div className="
+        relative
         bg-[url('/ian_raj/ian_raj_2.jpg')] h-[630px] w-full 
-        bg-cover bg-center bg-no-repeat mt-[80px] shadow-md
+        bg-cover bg-[position:45%_center] bg-no-repeat mt-[80px] shadow-md
         2xl:bg-top"
       >
       </div>
@@ -20,7 +24,7 @@ export default function Home() {
             <div className="couple-name text-purple-600">Yiyan & Rajena</div>
             <hr className="card-hr border-gray-300"/>
             <div className="couple-text">
-              人海之中，與你相遇，是多麼幸運。你的笑容，悄悄闖進我內心裡，把平凡的日子點綴亮起；
+              人海之中，與你相遇，是多麼幸運。你的笑容，悄悄闖進我內心，把平凡的日子點綴亮起；
               遇見你的那一刻，我曉得，幸福已經悄悄來臨，我願意成為你一輩子的伴侶。
             </div>
             <CoupleCarousel folder="Ian_raj" />  
@@ -46,6 +50,11 @@ export default function Home() {
           </div>
         </div>
       </main>
+      {/* <div className="animate-bounce">動畫測試1</div>
+      <div className="text-3xl font-bold text-red-500 animate-bounce">
+        動畫測試2
+      </div>
+      <div className="text-red-500 text-3xl font-bold">Hello Tailwind</div> */}
       <Footer />
     </div>
   );

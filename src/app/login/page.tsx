@@ -1,11 +1,12 @@
+// src/app/login/page.tsx
 "use client";
 
 import { useState } from "react";
-import { 
-    signInWithEmailAndPassword, 
-    createUserWithEmailAndPassword 
-} from "firebase/auth";
-import { auth } from "@/lib/firebase";
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
+import { auth, db } from "@/lib/firebase";
+import { useRouter } from "next/navigation";
+import { doc, setDoc, getDoc, serverTimestamp } from "firebase/firestore"
+
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
@@ -15,15 +16,51 @@ export default function LoginPage() {
     const [password, setPassword] = useState("");
     const [isLogin, setIsLogin] = useState(true); // 切換登入/註冊模式
     const [message, setMessage] = useState("");
+    
+    const router = useRouter();
 
     const handleSubmit = async () => {
         try {
             if (isLogin) {
-                await signInWithEmailAndPassword(auth, email, password);
-                setMessage("登入成功！");
+                // 登入邏輯
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+
+                const docSnap = await getDoc(doc(db, "users", user.uid));
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+
+                    // 若還沒填名字或性別，導向編輯頁面
+                    if (!data.name || !data.gender) {
+                        router.push("/profile/edit");
+                    } else {
+                        setMessage("登入成功！");
+                        router.push("/profile");
+                    }
+                }
             } else {
-                await createUserWithEmailAndPassword(auth, email, password);
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+                
+                // 隨機頭像服務 產生頭像
+                // const avatarUrl = `https://i.pravatar.cc/150?u=${user.uid}`;
+
+                // 建立 Firestore users/{uid} 文件
+                await setDoc(doc(db, "users", user.uid), {
+                    uid: user.uid,
+                    email: user.email,
+                    name: "",
+                    gender:"",
+                    interests: [],
+                    location: "",
+                    avatarUrl:"",
+                    intro: "",
+                    createdAt: serverTimestamp(),
+                });
+
                 setMessage("註冊成功！歡迎加入 MatchU！");
+                setIsLogin(true); // 切換回登入模式
+                router.push("/profile/edit");
             }
         } catch (err: any) {
             setMessage(`操作失敗：${err.message}`);
@@ -47,6 +84,9 @@ export default function LoginPage() {
                     placeholder="電子信箱"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)} 
+                    onKeyDown={(e) => {
+                        if (e.key === "Enter") handleSubmit();
+                    }}
                 />
 
                 <input 
@@ -54,8 +94,12 @@ export default function LoginPage() {
                     type="password"
                     placeholder="密碼"
                     value={password}
-                    onChange={(e) => setPassword(e.target.value)} 
+                    onChange={(e) => setPassword(e.target.value)}
+                    onKeyDown={(e) => {
+                        if (e.key === "Enter") handleSubmit();
+                    }}                     
                 />
+
                 <button 
                     onClick={handleSubmit}
                     className="w-full bg-purple-500 text-white py-2 rounded hover:bg-purple-600 transition cursor-pointer"

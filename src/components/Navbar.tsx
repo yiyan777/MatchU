@@ -1,13 +1,32 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { auth } from "@/lib/firebase";
+import { onAuthStateChanged, signOut } from "firebase/auth";
 import { useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 export default function Navbar() {
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
     const router = useRouter();
+    const pathname = usePathname();
+
+    useEffect(()=> {
+      const unsubscribe = onAuthStateChanged(auth, (user) => {
+        setIsLoggedIn(!!user); // 有登入就 true, 沒登入就 false
+      });
+
+      return () => unsubscribe();
+    }, []);
+
+    const handleLogout = async () => {
+      await signOut(auth);
+      router.push("/");
+    };
 
     return (
-        <nav className="flex justify-between items-center mb-1 sm:px-4 fixed top-0 left-0 right-0 bg-white w-full h-[80px] z-50">
+      <nav className="flex justify-between items-center mb-1 sm:px-4 fixed top-0 left-0 right-0 bg-white w-full h-[80px] z-50">
         <Link href="/" className="cursor-pointer flex flex-col items-center justify-center">
           <svg 
             className="w-20 h-12 text-purple-500 fill-current"
@@ -26,16 +45,43 @@ export default function Navbar() {
           <div className="text-purple-600 text-md title pr-[2px]">MatchU</div>
         </Link>
 
-        <button
-            onClick={() => router.push("/login")} 
-            className="
+        <div className="flex gap-1">
+          {isLoggedIn && (pathname === "/" || pathname === "/explore") && (
+            <button className="
                 text-sm rounded-full px-4 py-2 text-white cursor-pointer
                 bg-gradient-to-l from-purple-500 to-pink-300
                 transition duration-300 ease-in-out
                 hover:brightness-110"
-        >
-            登入 / 註冊
-        </button>
+                onClick= {()=> router.push("/profile")}
+                >
+                  我的主頁
+            </button>
+          )}
+
+          {isLoggedIn ? (
+            <button
+              onClick={handleLogout} 
+              className="
+                  text-sm rounded-full px-4 py-2 text-white cursor-pointer
+                  bg-gradient-to-l from-purple-500 to-pink-300
+                  transition duration-300 ease-in-out
+                  hover:brightness-110"
+            >
+              登出
+            </button>
+          ) : (
+            <button
+              onClick={() => router.push("/login")}
+              className="
+                  text-sm rounded-full px-4 py-2 text-white cursor-pointer
+                  bg-gradient-to-l from-purple-500 to-pink-300
+                  transition duration-300 ease-in-out
+                  hover:brightness-110"
+            >
+              登入 / 註冊
+            </button>
+          )}
+          </div>
       </nav>
     );
 }
