@@ -12,7 +12,7 @@ export default function Home() {
       {/* 首頁大圖 */}
       <div className="
         relative
-        bg-[url('/ian_raj/ian_raj_2.jpg')] h-[630px] w-full 
+        bg-[url('/Ian_raj/Ian_raj_2.jpg')] h-[630px] w-full 
         bg-cover bg-no-repeat mt-[80px] shadow-md 
         bg-[position:42%_center] sm:bg-[position:38%_center] md:bg-[position:30%_center]
         2xl:bg-top"
