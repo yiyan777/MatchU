@@ -18,7 +18,7 @@ export default function Home() {
         2xl:bg-top"
       >
         <div className="
-          absolute inset-0 bottom-0 bg-black/30 flex flex-col justify-end items-center 
+          absolute inset-x-0 bottom-0 bg-black/20 h-1/2 2xl:h-full flex flex-col justify-end items-center 
           text-white text-center px-2"
           >
           <div className="text-[34px] md:text-5xl leading-tight mb-2 mt-[50px] font-sans">
