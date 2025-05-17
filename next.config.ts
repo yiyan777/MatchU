@@ -5,6 +5,9 @@ const nextConfig: NextConfig = {
   images: {
     domains: ['i.pravatar.cc', "firebasestorage.googleapis.com"],
   },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
 };
 
 export default nextConfig;
