@@ -16,6 +16,7 @@
         },
         animation: {
           'fade-in': 'fade-in 0.5s ease-out forwards',
+          'ping-fast': 'ping 0.8s cubic-bezier(0, 0, 0.2, 1)',
         },
       },
     },

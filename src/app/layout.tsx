@@ -23,6 +23,9 @@ const caveat = Caveat({
 export const metadata: Metadata = {
   title: "MatchU-遇見妳(你)的另一伴",
   description: "這是一個交往網站。人海之中遇見你，一生的幸福，由此開始",
+  icons: {
+    icon: "/favicon.png",
+  },
 };
 
 export default function RootLayout({

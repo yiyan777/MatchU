@@ -13,9 +13,35 @@ export default function Home() {
       <div className="
         relative
         bg-[url('/ian_raj/ian_raj_2.jpg')] h-[630px] w-full 
-        bg-cover bg-[position:45%_center] bg-no-repeat mt-[80px] shadow-md
+        bg-cover bg-no-repeat mt-[80px] shadow-md 
+        bg-[position:42%_center] sm:bg-[position:38%_center] md:bg-[position:30%_center]
         2xl:bg-top"
       >
+        <div className="
+          absolute inset-0 bottom-0 bg-black/30 flex flex-col justify-end items-center 
+          text-white text-center px-2"
+          >
+          <div className="text-[34px] md:text-5xl leading-tight mb-2 mt-[50px] font-sans">
+            <span className="blcok sm:hidden">
+              在人海之中<br />
+              尋覓心靈契合的真愛
+            </span>
+            <span className="hidden sm:block">
+              在人海之中 尋覓心靈契合的真愛
+            </span>
+          </div>
+          <p className="text-lg md:text-2xl mb-3 font-snas">
+            MatchU — 為認真的你打造的誠意交友平台
+          </p>
+          <a href="/explore" className="
+            text-white font-sans
+            py-2 px-6 rounded-full text-lg shadow-md mb-[80px] 2xl:mb-[30px]
+            bg-gradient-to-l from-purple-500 to-pink-300
+            transition duration-300 ease-in-out hover:brightness-110
+            ">
+              開始探索
+          </a>
+        </div>
       </div>
       
       <main className="w-[90%] md:w-[1200px] m-auto mt-5 max-w-full">
