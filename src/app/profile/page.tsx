@@ -42,7 +42,7 @@ export default function ProfilePage() {
     <div className="min-h-screen flex flex-col m-auto">
       <Navbar />
       <main className="
-        p-6 max-w-lg mx-auto mt-[90px] border border-gray-300 
+        p-6 max-w-lg mx-auto sm:mt-[90px] border border-gray-300 
         rounded shadow-md "
       >
         <h1 className="text-2xl text-center mb-6 text-gray-500 font-sans font-bold">
