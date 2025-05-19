@@ -42,10 +42,12 @@ export default function ProfilePage() {
     <div className="min-h-screen flex flex-col m-auto">
       <Navbar />
       <main className="
-        p-6 max-w-lg mx-auto mt-[80px] border border-gray-300 
-        rounded shadow-md"
+        p-6 max-w-lg mx-auto mt-[90px] border border-gray-300 
+        rounded shadow-md "
       >
-        <h1 className="text-2xl text-center mb-6 text-gray-500 font-sans font-bold">我的個人資料</h1>
+        <h1 className="text-2xl text-center mb-6 text-gray-500 font-sans font-bold">
+          我的個人資料
+        </h1>
 
         {/* 大頭貼 */}
         <div className="flex justify-center mb-4">

@@ -26,7 +26,8 @@ export default function Navbar() {
     };
 
     return (
-      <nav className="flex justify-between items-center mb-1 sm:px-4 fixed top-0 left-0 right-0 bg-white w-full h-[80px] z-50">
+      <nav className="flex justify-between items-center mb-1 sm:px-4 fixed top-0 left-0 right-0 
+        bg-white w-full h-[80px] z-50 border-b-1 border-gray-200">
         <Link href="/" className="cursor-pointer flex flex-col items-center justify-center">
           <svg 
             className="w-20 h-12 text-purple-500 fill-current"

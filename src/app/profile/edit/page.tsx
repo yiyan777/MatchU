@@ -15,10 +15,11 @@ export default function EditProfilePage() {
     name: "",
     intro: "",
     location: "",
-    interests: "",
+    interests: [] as string[], // 調整興趣格式，從字串改成陣列
     gender: "",
     avatarUrl: "",
   });
+  const [interestInput, setInterestInput] = useState("");
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
@@ -34,7 +35,7 @@ export default function EditProfilePage() {
             name: data.name || "",
             intro: data.intro || "",
             location: data.location || "",
-            interests: data.interests?.join(", ") || "",
+            interests: data.interests || [],
             gender: data.gender || "",
             avatarUrl: data.avatarUrl || "",
           });
@@ -83,10 +84,7 @@ export default function EditProfilePage() {
       intro: formData.intro,
       location: formData.location,
       gender: formData.gender,
-      interests: formData.interests
-        .split(",")
-        .map((item) => item.trim())
-        .filter(Boolean),
+      interests: formData.interests,
     });
 
     router.push("/profile");
@@ -144,13 +142,42 @@ export default function EditProfilePage() {
         </label>
 
         <label className="block mb-3">
-          興趣（用逗號分隔）：
-          <input
+          興趣：
+          <div className="flex flex-wrap gap-2 mt-1 mb-2">
+            {formData.interests.map((tag, index) => (
+              <span 
+                key={index}
+                className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-sm cursor-pointer"
+                onClick={() => {
+                  setFormData((prev) => ({
+                    ...prev,
+                    interests: prev.interests.filter((_, i) => i !== index),
+                  }));
+                }}
+              >
+                {tag} ✕
+              </span>
+            ))}
+          </div>
+          
+          <input 
             type="text"
-            name="interests"
-            value={formData.interests}
-            onChange={handleChange}
-            className="block w-full border border-gray-400 rounded p-2 mt-1"
+            value={interestInput}
+            onChange={(e) => setInterestInput(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && interestInput.trim()) {
+                e.preventDefault();
+                if (!formData.interests.includes(interestInput.trim())) {
+                  setFormData((prev) => ({
+                    ...prev,
+                    interests: [...prev.interests, interestInput.trim()],
+                  }));
+                }
+                setInterestInput("");
+              }
+            }}
+            placeholder="請輸入興趣後 按下Enter"
+            className="block w-full border border-gray-400 rounded p-2"
           />
         </label>
 
