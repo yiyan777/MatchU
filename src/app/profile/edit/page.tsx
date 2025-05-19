@@ -155,30 +155,47 @@ export default function EditProfilePage() {
                   }));
                 }}
               >
-                {tag} ✕
+                {tag} x
               </span>
             ))}
           </div>
-          
-          <input 
-            type="text"
-            value={interestInput}
-            onChange={(e) => setInterestInput(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && interestInput.trim()) {
-                e.preventDefault();
-                if (!formData.interests.includes(interestInput.trim())) {
+
+          <div className="flex gap-2 mt-1">
+            <input 
+              type="text"
+              value={interestInput}
+              onChange={(e) => setInterestInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && interestInput.trim()) {
+                  e.preventDefault();
+                  if (!formData.interests.includes(interestInput.trim())) {
+                    setFormData((prev) => ({
+                      ...prev,
+                      interests: [...prev.interests, interestInput.trim()],
+                    }));
+                  }
+                  setInterestInput("");
+                }
+              }}
+              placeholder="請輸入興趣後按新增或 Enter"
+              className="block w-full border border-gray-400 rounded p-2"
+            />
+            <button 
+              type="button"
+              onClick={() => {
+                if (interestInput.trim() && !formData.interests.includes(interestInput.trim())) {
                   setFormData((prev) => ({
                     ...prev,
                     interests: [...prev.interests, interestInput.trim()],
                   }));
+                  setInterestInput("");
                 }
-                setInterestInput("");
-              }
-            }}
-            placeholder="請輸入興趣後 按下Enter"
-            className="block w-full border border-gray-400 rounded p-2"
-          />
+              }}
+              className="px-3 py-2 bg-gray-200 hover:bg-gray-300 rounded text-sm whitespace-nowrap cursor-pointer"
+            >
+              新增
+            </button>
+          </div>
         </label>
 
         <label className="block mb-4">
