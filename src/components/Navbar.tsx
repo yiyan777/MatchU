@@ -6,8 +6,10 @@ import { auth } from "@/lib/firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { db } from "@/lib/firebase";
 
-export default function Navbar() {
+export default function Navbar({ hasMatch = false}: {hasMatch?: boolean}) {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const router = useRouter();
     const pathname = usePathname();
@@ -47,7 +49,20 @@ export default function Navbar() {
         </Link>
 
         <div className="flex gap-1">
-          {isLoggedIn && (pathname === "/" || pathname === "/explore") && (
+          {isLoggedIn && hasMatch &&(
+            <button
+              className="
+                text-sm rounded-full px-4 py-2 text-white cursor-pointer 
+                bg-gradient-to-l from-purple-500 to-pink-300
+                transition duration-300 ease-in-out
+                hover:brightness-110"
+                onClick={() => router.push("/chat")}
+            >
+              聊天列表
+            </button>
+          )}
+
+          {isLoggedIn && (pathname === "/" || pathname === "/explore" || pathname === "/chat") && (
             <button className="
                 text-sm rounded-full px-4 py-2 text-white cursor-pointer
                 bg-gradient-to-l from-purple-500 to-pink-300

@@ -147,7 +147,7 @@ export default function EditProfilePage() {
             {formData.interests.map((tag, index) => (
               <span 
                 key={index}
-                className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-sm cursor-pointer"
+                className="bg-purple-100 text-purple-800 px-2 py-1 rounded-full text-sm cursor-pointer"
                 onClick={() => {
                   setFormData((prev) => ({
                     ...prev,

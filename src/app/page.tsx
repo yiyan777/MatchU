@@ -1,13 +1,24 @@
+// 首頁
+"use client";
+
 import Image from "next/image";
 import CoupleCarousel from "@/components/CoupleCarousel";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { auth, db } from "@/lib/firebase";
+import { onAuthStateChanged } from "firebase/auth";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { useEffect, useState } from "react";
+import { useHasMatch } from "@/hooks/useHasMatch";
+import Link from "next/link";
 
 
 export default function Home() {
+  const hasMatch = useHasMatch();
+  
   return (
     <div>
-      <Navbar />
+      <Navbar hasMatch={hasMatch} />
 
       {/* 首頁大圖 */}
       <div className="
@@ -30,17 +41,19 @@ export default function Home() {
               在人海之中 尋覓心靈契合的真愛
             </span>
           </div>
-          <p className="text-lg md:text-2xl mb-3 font-snas">
+          <p className="text-lg md:text-2xl mb-3 font-sans">
             MatchU — 為認真的你打造的誠意交友平台
           </p>
-          <a href="/explore" className="
-            text-white font-sans
-            py-2 px-6 rounded-full text-lg shadow-md mb-[80px] 2xl:mb-[30px]
-            bg-gradient-to-l from-purple-500 to-pink-300
-            transition duration-300 ease-in-out hover:brightness-110
-            ">
-              開始探索
-          </a>
+          <Link href="/explore" prefetch>
+            <button className="
+              text-white font-sans cursor-pointer
+              py-2 px-6 rounded-full text-lg shadow-md mb-[80px] 2xl:mb-[30px]
+              bg-gradient-to-l from-purple-500 to-pink-300
+              transition duration-300 ease-in-out hover:brightness-110"
+            >
+                開始探索
+              </button>
+          </Link>
         </div>
       </div>
       

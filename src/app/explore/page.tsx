@@ -10,6 +10,7 @@ import Footer from "@/components/Footer";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { addDoc, serverTimestamp } from "firebase/firestore";
+import { useHasMatch } from "@/hooks/useHasMatch";
 
 
 export default function ExplorePage() {
@@ -18,11 +19,14 @@ export default function ExplorePage() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   const [showHeart, setShowHeart] = useState(false);
+  const [currentUserId, setCurrentUserId] = useState("");
+  const hasMatch = useHasMatch();
   const router = useRouter();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (!user) return router.push("/login");
+      setCurrentUserId(user.uid);
 
       const userDoc = await getDocs(query(collection(db, "users"), where("uid", "==", user.uid)));
       const userData = userDoc.docs[0]?.data();
@@ -60,13 +64,34 @@ export default function ExplorePage() {
     if (!person?.uid) return;
 
     try {
+      // 新增 like 紀錄
       await addDoc(collection(db, "likes"), {
         from: user.uid,
         to: person.uid,
         createdAt: serverTimestamp()
       });
 
-      // 顯示動畫
+      // 檢查對方是否也對自己按過讚
+      const q = query(
+        collection(db, "likes"),
+        where("from", "==", person.uid),
+        where("to", "==", user.uid)
+      );
+      const snapshot = await getDocs(q);
+
+      if (!snapshot.empty) {
+        // 雙方互讚，建立配對
+        await addDoc(collection(db, "matches"), {
+          userIds: [user.uid, person.uid],
+          matchedAt: serverTimestamp(),
+          lastMessage: "",
+          lastUpdated: serverTimestamp(),
+        });
+
+        alert("配對成功！可以開始聊天囉！💘");
+      }
+
+      // 顯示愛心動畫
       setShowHeart(true);
 
       setTimeout(() => {
@@ -98,14 +123,43 @@ export default function ExplorePage() {
 
   return (
     <div className="min-h-screen flex flex-col justify-between">
-      <Navbar />
+      <Navbar hasMatch={hasMatch} />
       <main className="relative mt-[80px] flex flex-col items-center p-4">
-        <div className="w-full max-w-[300px] border border-gray-300 p-8 rounded shadow-lg bg-white">
+        <div className="
+          w-full max-w-[300px] border border-gray-300 p-8 rounded 
+          shadow-lg bg-white flex flex-col gap-2"
+          >
+
           <img src={person.avatarUrl || "/default-avatar.png"} className="w-28 h-38 mx-auto rounded shadow-md" />
           <h2 className="text-xl text-purple-400 font-sans font-bold text-center mt-4">{person.name}</h2>
-          <p className="text-sm text-center mt-2 text-gray-600">*自我介紹：{person.intro}</p>
-          <p className="text-sm text-center mt-1 text-gray-600">*我的興趣：{person.interests?.join(", ")}</p>
-          <p className="text-sm text-center mt-1 text-gray-600">*生活地點：{person.location}</p>
+          <div className="text-sm mt-2 text-gray-600">
+            <p className="font-medium mb-1">自我介紹：</p>
+            <p>{person.intro || "尚未填寫"}</p>  
+          </div>
+
+          <hr  className="border-gray-300 border-0.5"/>
+
+          <div className="text-sm text-center mt-1 text-gray-600 flex flex-wrap">
+            <span className="font-medium">我的興趣：</span>
+            <div>
+              {person.interests && person.interests.length > 0 ? (
+                person.interests.map((interest: string, index: number) => (
+                  <span
+                    key={index}
+                    className="bg-purple-100 text-purple-800 px-2 py-1 rounded-full text-sm"  
+                  >
+                    {interest}
+                  </span>  
+                ))
+
+              ) : ( <span className="text-gray-400">尚未填寫</span> )
+              }
+            </div>
+          </div>
+
+          <hr  className="border-gray-300 border-0.5"/>
+
+          <p className="text-sm text-gray-600"><span className="font-medium">生活地點</span>：{person.location}</p>
         </div>  
         
         {showHeart && (

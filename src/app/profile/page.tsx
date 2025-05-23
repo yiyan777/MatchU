@@ -10,10 +10,12 @@ import { useRouter } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Image from "next/image";
+import { useHasMatch } from "@/hooks/useHasMatch";
 
 export default function ProfilePage() {
   const [userData, setUserData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const hasMatch = useHasMatch();
 
   const router = useRouter();
 
@@ -40,7 +42,7 @@ export default function ProfilePage() {
 
   return (
     <div className="min-h-screen flex flex-col m-auto">
-      <Navbar />
+      <Navbar hasMatch={hasMatch} />
       <main className="
         p-6 max-w-lg mx-auto sm:mt-[90px] border border-gray-300 
         rounded shadow-md "
@@ -65,7 +67,24 @@ export default function ProfilePage() {
           <div><strong>*暱稱：</strong>{userData.name || "未命名"}</div>
           <div><strong>*Email：</strong>{userData.email}</div>
           <div><strong>*自我介紹：</strong>{userData.intro || "尚未填寫"}</div>
-          <div><strong>*興趣：</strong>{userData.interests?.join(", ") || "尚未填寫"}</div>
+
+          <div>
+            <strong>*興趣：</strong>
+            <div className="flex flex-wrap gap-2 mt-1">
+              {userData.interests && userData.interests.length > 0 ? (
+                userData.interests.map((interest: string, index: number) => (
+                  <span
+                    key={index}
+                    className="bg-purple-100 text-purple-800 px-2 py-1 rounded-full text-sm"
+                  >
+                    {interest}
+                  </span>
+                ))
+              ): (<span className="text-gray-400">尚未填寫</span>
+              )}
+            </div>
+          </div>
+
           <div><strong>*地點：</strong>{userData.location || "尚未填寫"}</div>
         </div>
       </main>
