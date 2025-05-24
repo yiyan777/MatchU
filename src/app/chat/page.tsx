@@ -13,9 +13,11 @@ import {
   doc,
   getDoc,
   orderBy,
+  onSnapshot,
 } from "firebase/firestore";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
+import { useHasMatch } from "@/hooks/useHasMatch";
 
 interface MatchItem {
   id: string;
@@ -27,6 +29,7 @@ interface MatchItem {
     name: string;
     avatarUrl: string;
   };
+  unreadCount: number;
 }
 
 export default function ChatListPage() {
@@ -35,44 +38,51 @@ export default function ChatListPage() {
   const router = useRouter();
 
   useEffect(() => {
-    onAuthStateChanged(auth, async (user) => {
+    let unsubscribeSnapshot: (() => void) | null = null;
+    
+    const unsubscribeAuth = onAuthStateChanged(auth, async (user) => {
       if (user) {
         setCurrentUserId(user.uid);
+        
         const q = query(
           collection(db, "matches"),
-          where("userIds", "array-contains", user.uid)
+          where("userIds", "array-contains", user.uid),
+          orderBy("lastUpdated", "desc") // 按照最新訊息排序
         );
 
-        const snapshot = await getDocs(q);
+        unsubscribeSnapshot = onSnapshot(q, async (snapshot) => {
+          const matchList: MatchItem[] = await Promise.all(
+            snapshot.docs.map(async (docSnap) => {
+              const data = docSnap.data();
+              const otherId = data.userIds.find((id: string) => id !== user.uid);
+              const userDoc = await getDoc(doc(db, "users", otherId));
+              const otherUser = userDoc.data();
 
-        const matchList: MatchItem[] = await Promise.all(
-          snapshot.docs.map(async (docSnap) => {
-            const data = docSnap.data();
-            const otherId = data.userIds.find((id: string) => id !== user.uid);
-            const userDoc = await getDoc(doc(db, "users", otherId));
-            const otherUser = userDoc.data();
-
-            return {
-              id: docSnap.id,
-              userIds: data.userIds,
-              lastMessage: data.lastMessage || "",
-              lastUpdated: data.lastUpdated?.toDate(),
-              otherUser: {
-                uid: otherId,
-                name: otherUser?.name || "匿名",
-                avatarUrl: otherUser?.avatarUrl || "/default-avatar.png",
-              },
-            };
-          })
-        );
-        setMatches(matchList);
-
-        console.log("目前登入者:", user.uid);
-        console.log("matches 文件數量:", snapshot.size);
-      } else {
+              return {
+                id: docSnap.id,
+                userIds: data.userIds,
+                lastMessage: data.lastMessage || "",
+                lastUpdated: data.lastUpdated?.toDate(),
+                unreadCount: data.unreadCounts?.[user.uid] || 0,
+                otherUser: {
+                  uid: otherId,
+                  name: otherUser?.name || "匿名",
+                  avatarUrl: otherUser?.avatarUrl || "/default-avatar.png",
+                },
+              };
+            })
+          );
+          setMatches(matchList);
+    });
+  } else {
         router.push("/login");
       }
     });
+
+    return () => {
+      unsubscribeAuth();
+      if (unsubscribeSnapshot) unsubscribeSnapshot();
+    };
   }, []);
 
   return (
@@ -82,14 +92,21 @@ export default function ChatListPage() {
       <div className="space-y-4">
         {matches.map((match) => (
           <Link key={match.id} href={`/chat/${match.id}`}>
-            <div className="flex items-center p-3 rounded-lg shadow hover:bg-gray-100 cursor-pointer">
+            <div className="flex items-center p-3 rounded-lg shadow hover:bg-gray-100 cursor-pointer mt-[80px]">
               <img
                 src={match.otherUser.avatarUrl}
                 alt="頭像"
                 className="w-12 h-12 rounded-full object-cover mr-3"
               />
-              <div className="flex-1 mt-[80px]">
-                <div className="font-semibold">{match.otherUser.name}</div>
+              <div className="flex-1">
+                <div className="font-semibold">
+                  {match.otherUser.name}
+                  {match.unreadCount > 0 && (
+                    <span className="ml-2 bg-green-500 text-white text-xs px-2 py-0.5 rounded-full">
+                      {match.unreadCount}
+                    </span>
+                  )}
+                </div>
                 <div>{match.lastMessage || "開始聊天吧！"}</div>
               </div>
               <div className="text-xs text-gray-400 ml-2">

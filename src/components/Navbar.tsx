@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "@/lib/firebase";
+import { useHasMatch } from "@/hooks/useHasMatch";
 
 export default function Navbar({ hasMatch = false}: {hasMatch?: boolean}) {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -24,7 +25,9 @@ export default function Navbar({ hasMatch = false}: {hasMatch?: boolean}) {
 
     const handleLogout = async () => {
       await signOut(auth);
-      router.push("/");
+      setTimeout(() => {
+        router.push("/");
+      }, 300);
     };
 
     return (
