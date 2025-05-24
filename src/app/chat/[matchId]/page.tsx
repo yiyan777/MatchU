@@ -169,7 +169,7 @@ export default function ChatRoomPage() {
 									<div 
 										className={`py-2 px-2 rounded-md max-w-[85%] text-sm ${
 											isMe ? "bg-purple-100 text-left"
-											: "bg-gray-100 text-left "
+											: "bg-purple-100 text-left "
 										}`}
 									>
 										{msg.content}
