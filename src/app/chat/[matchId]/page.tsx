@@ -46,9 +46,13 @@ export default function ChatRoomPage() {
 						const otherUserSnap = await getDoc(doc(db, "users", otherUid));
 						const otherUserData = otherUserSnap.data();
 						if (otherUserData) {
+							const avatarUrls = otherUserData.avatarUrls;
+							const avatarUrl = Array.isArray(avatarUrls) && avatarUrls.length > 0
+								? avatarUrls[0]
+								: "/default-avatar.png";
 							setPartner({
 								name: otherUserData.name || "匿名",
-								avatarUrl: otherUserData.avatarUrl || "/default-avatar.png",
+								avatarUrl,
 							});
 						}
 					}

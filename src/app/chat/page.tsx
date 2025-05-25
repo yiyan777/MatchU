@@ -58,6 +58,11 @@ export default function ChatListPage() {
               const userDoc = await getDoc(doc(db, "users", otherId));
               const otherUser = userDoc.data();
 
+              const avatarUrls = otherUser?.avatarUrls;
+              const avatarUrl = Array.isArray(avatarUrls) && avatarUrls.length > 0
+                ? avatarUrls[0]
+                : "/default-avatar.png";
+
               return {
                 id: docSnap.id,
                 userIds: data.userIds,
@@ -67,7 +72,7 @@ export default function ChatListPage() {
                 otherUser: {
                   uid: otherId,
                   name: otherUser?.name || "匿名",
-                  avatarUrl: otherUser?.avatarUrl || "/default-avatar.png",
+                  avatarUrl,
                 },
               };
             })

@@ -15,6 +15,7 @@ import { useHasMatch } from "@/hooks/useHasMatch";
 export default function ProfilePage() {
   const [userData, setUserData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [currentIndex, setCurrentIndex] = useState(0);
   const hasMatch = useHasMatch();
 
   const router = useRouter();
@@ -44,23 +45,41 @@ export default function ProfilePage() {
     <div className="min-h-screen flex flex-col m-auto">
       <Navbar hasMatch={hasMatch} />
       <main className="
-        p-6 max-w-lg mx-auto sm:mt-[90px] border border-gray-300 
-        rounded shadow-md "
+        p-6 max-w-sm mx-auto mt-[80px] border border-gray-300 
+        rounded shadow-md"
       >
         <h1 className="text-2xl text-center mb-6 text-gray-500 font-sans font-bold">
           我的個人資料
         </h1>
 
-        {/* 大頭貼 */}
-        <div className="flex justify-center mb-4">
-          <Image
-            src={userData.avatarUrl || "/default-avatar.png"}
-            alt="頭像"
-            width={100}
-            height={100}
-            className="rounded border shadow"
-          />
-        </div>
+        {/* 頭貼輪播顯示 */}
+        {userData.avatarUrls && userData.avatarUrls.length > 0 && (
+          <div className="relative flex justify-center items-center mb-4">
+            <img
+              src={userData.avatarUrls[currentIndex]}
+              alt="頭貼"
+              className="w-[100px] h-[130px] mx-auto object-cover rounded shadow"
+            />
+
+            {userData.avatarUrls.length > 1 && currentIndex > 0 && (
+              <button
+                onClick={() => setCurrentIndex(currentIndex - 1)}
+                className="absolute left-[40px] sm:left-[70px] text-xl"
+              >
+                <img src="/arrows/left-arrow.png" alt="左箭頭" width={30} className="cursor-pointer" />
+              </button>
+            )}
+
+            {userData.avatarUrls.length > 1 && currentIndex < userData.avatarUrls.length - 1 && (
+              <button
+                onClick={() => setCurrentIndex(currentIndex + 1)}
+                className="absolute right-[40px] sm:right-[70px] text-xl"
+              >
+                <img src="/arrows/right-arrow.png" alt="右箭頭" width={30} className="cursor-pointer" />
+              </button>
+            )}
+          </div>
+        )}
 
         {/* 文字資料 */}
         <div className="space-y-2 text-gray-700 text-md">

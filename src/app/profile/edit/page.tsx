@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { auth, db } from "@/lib/firebase";
 import { onAuthStateChanged } from "firebase/auth";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc, deleteField } from "firebase/firestore";
 import { uploadAvatar } from "@/lib/uploadAvatar";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -17,10 +17,10 @@ export default function EditProfilePage() {
     location: "",
     interests: [] as string[], // 調整興趣格式，從字串改成陣列
     gender: "",
-    avatarUrl: "",
+    avatarUrls: [] as string[], // 改支援多張圖片
   });
   const [interestInput, setInterestInput] = useState("");
-  const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
@@ -31,13 +31,26 @@ export default function EditProfilePage() {
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
           const data = docSnap.data();
+
+          // 資料遷移 : 從avatarUrl ➜ avatarUrls
+          let avatarUrls: string[] =[];
+          if (Array.isArray(data.avatarUrls)) {
+            avatarUrls = data.avatarUrls;
+          } else if (data.avatarUrl) {
+            avatarUrls = [data.avatarUrl];
+            await updateDoc(docRef, {
+              avatarUrls,
+              avatarUrl: deleteField(),
+            });
+          }
+          
           setFormData({
             name: data.name || "",
             intro: data.intro || "",
             location: data.location || "",
             interests: data.interests || [],
             gender: data.gender || "",
-            avatarUrl: data.avatarUrl || "",
+            avatarUrls,
           });
         }
       } else {
@@ -59,19 +72,34 @@ export default function EditProfilePage() {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setAvatarPreview(reader.result as string); // 預覽圖片
-    };
-    reader.readAsDataURL(file);
-
     const url = await uploadAvatar(file);
-    setFormData((prev) => ({ ...prev, avatarUrl: url }));
+    const newAvatarUrls = [...formData.avatarUrls];
+    
+    if (newAvatarUrls.length >= 6) {
+      alert("最多只能上傳 6 張圖片");
+      return;
+    }
+
+    newAvatarUrls.push(url);
+    setFormData((prev) => ({ ...prev, avatarUrls: newAvatarUrls }));
 
     // 立即更新 Firestore 中的 avatarUrl 欄位
     const uid = auth.currentUser?.uid;
     if (uid) {
-      await updateDoc(doc(db, "users", uid), { avatarUrl: url });
+      await updateDoc(doc(db, "users", uid), { avatarUrls: newAvatarUrls });
+    }
+  };
+
+  const handleDeleteAvatar = async (index: number) => {
+    const newAvatarUrls = [...formData.avatarUrls];
+    newAvatarUrls.splice(index, 1);
+
+    setFormData((prev) => ({ ...prev, avatarUrls: newAvatarUrls }));
+    setCurrentIndex(0); // 重設為第一張
+
+    const uid = auth.currentUser?.uid;
+    if (uid) {
+      await updateDoc(doc(db, "users", uid), { avatarUrls: newAvatarUrls });
     }
   };
 
@@ -85,6 +113,7 @@ export default function EditProfilePage() {
       location: formData.location,
       gender: formData.gender,
       interests: formData.interests,
+      avatarUrls: formData.avatarUrls,
     });
 
     router.push("/profile");
@@ -98,18 +127,45 @@ export default function EditProfilePage() {
       <main className="p-6 max-w-lg mx-auto mt-[80px] border border-gray-300 rounded shadow-md bg-white">
         <h1 className="text-2xl font-bold text-center mb-6 text-gray-500 font-sans font-bold">編輯個人資料</h1>
 
-        {/* 預覽大頭貼 */}
-        {formData.avatarUrl || avatarPreview ? (
-          <div className="flex justify-center mb-4">
+        {/* 頭貼輪播顯示 */}
+        {formData.avatarUrls.length > 0 && (
+          <div className="relative flex flex-col justify-center items-center mb-4">
             <img
-              src={avatarPreview || formData.avatarUrl}
-              alt="預覽頭像"
-              className="w-[100px] border-none shadow rounded"
+              src={formData.avatarUrls[currentIndex]}
+              alt="頭貼預覽"
+              className="w-[100px] h-[150px] object-cover rounded shadow"
             />
-          </div>
-        ) : null}
 
-        <label className="block mb-4 border border-gray-400 cursor-pointer">
+            {/* 左箭頭 */}
+            {formData.avatarUrls.length > 1 && currentIndex > 0 && (
+              <button
+                onClick={() => setCurrentIndex(currentIndex - 1)}
+                className="absolute left-[40px] text-xl"
+              >
+                <img src="/arrows/left-arrow.png" alt="左箭頭" width={30} className="cursor-pointer"/>
+              </button>
+            )}
+
+            {/* 右箭頭 */}
+            {formData.avatarUrls.length > 1 && currentIndex < formData.avatarUrls.length - 1 && (
+              <button
+                onClick={() => setCurrentIndex(currentIndex + 1)}
+                className="absolute right-[40px] text-xl"
+              >
+                <img src="/arrows/right-arrow.png" alt="右箭頭" width={30} className="cursor-pointer"/>
+              </button>
+            )}
+
+            <button
+              onClick={() => handleDeleteAvatar(currentIndex)}
+              className="mt-2 text-gray-500 text-sm cursor-pointer"
+            >
+              刪除這張
+            </button>
+          </div>
+        )}
+
+        <label className="block mb-4 border border-gray-400 cursor-pointer p-2 rounded">
           上傳大頭貼：
           <input
             type="file"
@@ -117,6 +173,8 @@ export default function EditProfilePage() {
             onChange={handleAvatarChange}
             className="block w-full mt-1 cursor-pointer"
           />
+          <p className="text-xs text-gray-500 mt-1">最多可上傳 6 張照片</p>
+          <p className="text-xs text-gray-500 mt-1">預設第 1 張為主頁大頭貼</p>
         </label>
         
         <label className="block mb-3">

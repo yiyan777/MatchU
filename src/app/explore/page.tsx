@@ -21,6 +21,7 @@ export default function ExplorePage() {
   const [showHeart, setShowHeart] = useState(false);
   const [currentUserId, setCurrentUserId] = useState("");
   const hasMatch = useHasMatch();
+  const [photoIndex, setPhotoIndex] = useState(0);
   const router = useRouter();
 
   useEffect(() => {
@@ -120,6 +121,16 @@ export default function ExplorePage() {
     )
   }
   const person = candidates[currentIndex];
+  const avatarUrls = person.avatarUrls || [person.avatarUrl || "/default-avatar.png"];
+  const totalPhotos = avatarUrls.length;
+
+  const handlePrevPhoto = () => {
+    setPhotoIndex((prev) => (prev -1 + totalPhotos) % totalPhotos);
+  };
+
+  const handleNextPhoto = () => {
+    setPhotoIndex((prev) => (prev + 1) % totalPhotos);
+  };
 
   return (
     <div className="min-h-screen flex flex-col justify-between">
@@ -129,8 +140,51 @@ export default function ExplorePage() {
           w-full max-w-[300px] border border-gray-300 p-8 rounded 
           shadow-lg bg-white flex flex-col gap-2"
           >
+          
+          {/* 頭貼輪播 */}
+          <div className="relative flex justify-center items-center">
 
-          <img src={person.avatarUrl || "/default-avatar.png"} className="w-28 h-38 mx-auto rounded shadow-md" />
+            {avatarUrls[photoIndex] ? (
+              <div className="relative w-28 h-44 mx-auto rounded-md shadow-md overflow-hidden">
+                <Image
+                  src = {avatarUrls[photoIndex]}
+                  alt="對象頭貼"
+                  fill
+                  className="object-cover"
+                  unoptimized
+                />
+              </div>
+            ) : ( 
+              <div className="w-28 h-44 mx-auto rounded-md shadow-md bg-gray-100 flex items-center justify-center text-sm text-gray-400">
+                無頭像
+              </div>
+            )}
+
+            {totalPhotos > 1 && (
+              <>
+                <button onClick={handlePrevPhoto} className="absolute left-[10px]">
+                  <img src="/arrows/left-arrow.png" alt="左箭頭" width={24} className="cursor-pointer" />
+                </button>
+                <button onClick={handleNextPhoto} className="absolute right-[10px]">
+                  <img src="/arrows/right-arrow.png" alt="右箭頭" width={24} className="cursor-pointer" />
+                </button>
+              </>
+            )}
+          </div>
+
+          {/* dot indicators */}
+          { totalPhotos > 1 && (
+            <div className="flex justify-center gap-2 mt-2">
+              {avatarUrls.map((_: string, idx: number) => (
+                <span
+                  key = {idx}
+                  className={`w-2 h-2 rounded-full ${idx === photoIndex ? "bg-purple-500" : "bg-gray-300"}`}
+                />
+              ))}
+            </div>
+          )}
+          
+          
           <h2 className="text-xl text-purple-400 font-sans font-bold text-center mt-4">{person.name}</h2>
           <div className="text-sm mt-2 text-gray-600">
             <p className="font-medium mb-1">自我介紹：</p>
