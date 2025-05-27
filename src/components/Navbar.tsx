@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { auth } from "@/lib/firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { useRouter } from "next/navigation";
@@ -139,8 +139,8 @@ export default function Navbar({
           {buttons}
         </div>
 
-        {/* 手機板漢堡圖 */}
-        <div className="sm:hidden relative">
+        {/* 手機版漢堡圖 */}
+        <div className="sm:hidden relative" ref={menuRef}>
           <button
             onClick={() => setMenuOpen(!menuOpen)}
             className="text-gray-700 focus:outline-none cursor-pointer mr-5"
