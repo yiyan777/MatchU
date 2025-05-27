@@ -123,9 +123,9 @@ export default function ChatRoomPage() {
 
   return (
     <div className="min-h-screen flex flex-col p-4 mt-[80px] max-w-md mx-auto">
-			<Navbar  hasMatch={hasMatch} />
+			<Navbar  hasMatch={hasMatch} partner={partner} />
 
-			{partner && (
+			{/* {partner && (
 				<div className="flex items-center gap-3 mb-4">
 					<img 
 						src={partner.avatarUrl} 
@@ -134,7 +134,7 @@ export default function ChatRoomPage() {
 					/>
 					<div className="text-lg font-semibold">{partner.name}</div>
 				</div>
-			)}
+			)} */}
 
       <div className="flex-1 overflow-y-auto space-y-3 border p-3 rounded bg-white shadow border-gray-300 border-1">
         {messages.map((msg, index) => {
