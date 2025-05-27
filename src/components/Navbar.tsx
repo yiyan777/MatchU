@@ -21,6 +21,7 @@ export default function Navbar({
     const router = useRouter();
     const pathname = usePathname();
     const [menuOpen, setMenuOpen] = useState(false);
+    const menuRef = useRef<HTMLDivElement>(null);
 
     useEffect(()=> {
       const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -28,6 +29,16 @@ export default function Navbar({
       });
 
       return () => unsubscribe();
+    }, []);
+
+    useEffect(() => {
+      const handleClickOutside = (e: MouseEvent) => {
+        if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+          setMenuOpen(false);
+        }
+      };
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
     const handleLogout = async () => {
@@ -146,57 +157,6 @@ export default function Navbar({
             </div>
           )}
         </div>
-
-        {/* <div className="flex gap-1"> */}
-          {/* {isLoggedIn && hasMatch &&(
-            <button
-              className="
-                text-sm rounded-full px-4 py-2 text-white cursor-pointer 
-                bg-gradient-to-l from-purple-500 to-pink-300
-                transition duration-300 ease-in-out
-                hover:brightness-110"
-                onClick={() => router.push("/chat")}
-            >
-              聊天列表
-            </button>
-          )}
-
-          {isLoggedIn && (pathname === "/" || pathname === "/explore" || pathname === "/chat") && (
-            <button className="
-                text-sm rounded-full px-4 py-2 text-white cursor-pointer
-                bg-gradient-to-l from-purple-500 to-pink-300
-                transition duration-300 ease-in-out
-                hover:brightness-110"
-                onClick= {()=> router.push("/profile")}
-                >
-                  我的主頁
-            </button>
-          )}
-
-          {isLoggedIn ? (
-            <button
-              onClick={handleLogout} 
-              className="
-                  text-sm rounded-full px-4 py-2 text-white cursor-pointer
-                  bg-gradient-to-l from-purple-500 to-pink-300
-                  transition duration-300 ease-in-out
-                  hover:brightness-110"
-            >
-              登出
-            </button>
-          ) : (
-            <button
-              onClick={() => router.push("/login")}
-              className="
-                  text-sm rounded-full px-4 py-2 text-white cursor-pointer
-                  bg-gradient-to-l from-purple-500 to-pink-300
-                  transition duration-300 ease-in-out
-                  hover:brightness-110"
-            >
-              登入 / 註冊
-            </button>
-          )} */}
-          {/* </div> */}
       </nav>
     );
 }
