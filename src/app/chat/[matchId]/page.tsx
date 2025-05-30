@@ -1,4 +1,4 @@
-// app/chat/[matchId]/page.tsx
+// app/chat/[matchId]/page.tsx 配對聊天室
 "use client";
 
 import { useEffect, useState, useRef } from "react";
@@ -123,18 +123,7 @@ export default function ChatRoomPage() {
 
   return (
     <div className="min-h-screen flex flex-col p-4 mt-[80px] max-w-md mx-auto">
-			<Navbar  hasMatch={hasMatch} partner={partner} />
-
-			{/* {partner && (
-				<div className="flex items-center gap-3 mb-4">
-					<img 
-						src={partner.avatarUrl} 
-						alt="對方頭像"
-						className="w-10 h-10 rounded-full object-cover"
-					/>
-					<div className="text-lg font-semibold">{partner.name}</div>
-				</div>
-			)} */}
+			<Navbar partner={partner} />
 
       <div className="flex-1 overflow-y-auto space-y-3 border p-3 rounded bg-white shadow border-gray-300 border-1">
         {messages.map((msg, index) => {
