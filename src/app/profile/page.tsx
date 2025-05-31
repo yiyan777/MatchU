@@ -43,7 +43,7 @@ export default function ProfilePage() {
 
   return (
     <div className="min-h-screen flex flex-col m-auto">
-      <Navbar hasMatch={hasMatch} />
+      <Navbar />
       <main className="
         p-6 max-w-sm mx-auto mt-[80px] border border-gray-300 
         rounded shadow-md"

@@ -134,7 +134,7 @@ export default function ExplorePage() {
 
   return (
     <div className="min-h-screen flex flex-col justify-between">
-      <Navbar hasMatch={hasMatch} />
+      <Navbar />
       <main className="relative mt-[80px] flex flex-col items-center p-4">
         <div className="
           w-full max-w-[300px] border border-gray-300 p-8 rounded 
