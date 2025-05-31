@@ -14,15 +14,23 @@ import {
   addDoc,
   serverTimestamp,
 	updateDoc,
+	getDocs,
 } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
 import Navbar from "@/components/Navbar";
 import { useHasMatch } from "@/hooks/useHasMatch";
 import { formatDateHeader } from "@/utils/formatDateHeader";
+import { Timestamp } from "firebase/firestore";
+
+type Message = {
+	sender: string;
+	content: string;
+	createdAt: Timestamp;
+}
 
 export default function ChatRoomPage() {
   const { matchId } = useParams();
-  const [messages, setMessages] = useState<any[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [currentUserId, setCurrentUserId] = useState("");
   const hasMatch = useHasMatch();
@@ -81,12 +89,37 @@ export default function ChatRoomPage() {
       orderBy("createdAt", "asc")
     );
 
+		let latestTimestamp = 0;
+
+		// 初次進聊天室，先撈出全部訊息一次
+		getDocs(q).then((snapshot) => {
+			const initialMessages = snapshot.docs.map((doc) => doc.data() as Message);
+			setMessages(initialMessages);
+
+			const last = snapshot.docs[snapshot.docs.length - 1]?.data()?.createdAt?.toMillis?.();
+			if (last) latestTimestamp = last;
+
+			setTimeout(() => {
+				messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+			}, 100);
+		});
+
+		// 設置增量監聽器，只監聽新增訊息
+
     const unsubscribe = onSnapshot(q, (snapshot) => {
-      const msgs = snapshot.docs.map((doc) => doc.data());
-      setMessages(msgs);
-      setTimeout(() => {
-        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-      }, 100);
+      snapshot.docChanges().forEach((change) => {
+				if (change.type === "added") {
+					const newMsg = change.doc.data() as Message;
+					const newTimestamp = newMsg.createdAt?.toMillis?.() || 0;
+
+					if (newTimestamp > latestTimestamp) {
+						setMessages((prev) => [...prev, newMsg]);
+						setTimeout(() => {
+							messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+						}, 100);
+					}
+				}
+			});
     });
 
     return () => unsubscribe();
