@@ -130,6 +130,17 @@ export default function ChatRoomPage() {
 
 		const matchRef = doc(db, "matches", matchId as string);
 
+		// 預先顯示訊息在畫面（Optimistic UI）
+		const tempMessage: Message = {
+			sender: currentUserId,
+			content: input.trim(),
+			createdAt: Timestamp.now(), // 使用本地時間先顯示
+		};
+		setMessages((prev) => [...prev, tempMessage]);
+		
+		// 清空輸入框
+  	setInput("");
+
 		// 取得 match 資料 ，以找出對方 UID
 		const matchSnap = await getDoc(matchRef);
 		const matchData = matchSnap.data();
