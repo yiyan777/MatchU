@@ -18,7 +18,7 @@ export default function Home() {
   
   return (
     <div>
-      <Navbar hasMatch={hasMatch} />
+      <Navbar />
 
       {/* 首頁大圖 */}
       <div className="
