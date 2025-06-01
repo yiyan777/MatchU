@@ -106,8 +106,10 @@ export default function ChatRoomPage() {
 
 		// 設置增量監聽器，只監聽新增訊息
 
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      snapshot.docChanges().forEach((change) => {
+    const unsubscribe = onSnapshot(q, async (snapshot) => {
+      snapshot.docChanges().forEach(async (change) => {
+				const matchRef = doc(db, "matches", matchId as string);
+
 				if (change.type === "added") {
 					const newMsg = change.doc.data() as Message;
 					const newTimestamp = newMsg.createdAt?.toMillis?.() || 0;
@@ -117,6 +119,28 @@ export default function ChatRoomPage() {
 						setTimeout(() => {
 							messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
 						}, 100);
+					}
+				}
+
+				if (change.type === "removed") {
+					const docs = snapshot.docs;
+					if (docs.length === 0) {
+						await updateDoc(matchRef, {
+							lastMessage: "",
+							lastUpdated: null,
+						});
+						setMessages([]);
+					} else {
+						const latestDoc = docs[docs.length - 1];
+						const lastMessage = latestDoc.data() as Message;
+
+						await updateDoc(matchRef, {
+							lastMessage: lastMessage.content,
+							lastUpdated: lastMessage.createdAt,
+						});
+
+						const msgs = docs.map((doc) => doc.data() as Message);
+						setMessages(msgs);
 					}
 				}
 			});
