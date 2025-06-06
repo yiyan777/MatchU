@@ -10,12 +10,14 @@ import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { useHasMatch } from "@/hooks/useHasMatch";
 import { Span } from "next/dist/trace";
+import { useOnlineStatus } from "@/hooks/useOnlineStatus";
 
 export default function Navbar({
   partner,
 }: {
   partner?: {name:string; avatarUrl: string } | null;
 }) {
+    useOnlineStatus();
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const router = useRouter();
     const pathname = usePathname();
