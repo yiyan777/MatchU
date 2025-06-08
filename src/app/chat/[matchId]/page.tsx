@@ -35,7 +35,7 @@ export default function ChatRoomPage() {
   const [currentUserId, setCurrentUserId] = useState("");
   const hasMatch = useHasMatch();
 	const messagesEndRef = useRef<HTMLDivElement | null>(null);
-	const [partner, setPartner] = useState<{ name: string; avatarUrl: string} | null>(null);
+	const [partner, setPartner] = useState<{ name: string; avatarUrl: string; uid: string} | null>(null);
 
 
   useEffect(() => {
@@ -59,6 +59,7 @@ export default function ChatRoomPage() {
 								? avatarUrls[0]
 								: "/default-avatar.png";
 							setPartner({
+								uid: otherUid,
 								name: otherUserData.name || "匿名",
 								avatarUrl,
 							});

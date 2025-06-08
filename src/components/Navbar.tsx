@@ -11,11 +11,13 @@ import { db } from "@/lib/firebase";
 import { useHasMatch } from "@/hooks/useHasMatch";
 import { Span } from "next/dist/trace";
 import { useOnlineStatus } from "@/hooks/useOnlineStatus";
+import { getDatabase, ref, onValue, off, remove } from "firebase/database";
+import { dbRT } from "@/lib/firebase"; 
 
 export default function Navbar({
   partner,
 }: {
-  partner?: {name:string; avatarUrl: string } | null;
+  partner?: {name:string; avatarUrl: string; uid?: string } | null;
 }) {
     useOnlineStatus();
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -24,6 +26,21 @@ export default function Navbar({
     const [menuOpen, setMenuOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
     const hasMatch = useHasMatch();
+    const [ isOnline, setIsOnline ] = useState(false);
+
+    useEffect(() => {
+      if (!partner?.uid) return;
+      const statusRef = ref(dbRT, `/onlineUsers/${partner.uid}`);
+
+      const unsubscribe = onValue(statusRef, (snapshot) => {
+        setIsOnline(snapshot.exists()); // 有資料表示在線上
+      });
+
+      return () => {
+        off(statusRef);
+      };
+    }, [partner?.uid]);
+
 
     useEffect(()=> {
       const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -44,6 +61,23 @@ export default function Navbar({
     }, []);
 
     const handleLogout = async () => {
+      const user = auth.currentUser;
+      if (user) {
+        // 手動移除 onlineUsers 的資料
+        const statusRef = ref(dbRT, `/onlineUsers/${user.uid}`);
+        const connectedRef = ref(dbRT, ".info/connected");
+        
+        try {
+          await remove(statusRef); // 刪除上線狀態
+          off(connectedRef) // 關閉連線監聽
+
+          console.log("成功主動移除 /onlineUsers");
+
+        } catch (error) {
+          console.error("移除 onlineUsers 失敗", error);
+        }
+      }
+
       await signOut(auth);
       setTimeout(() => {
         router.push("/");
@@ -113,11 +147,21 @@ export default function Navbar({
         </Link>
 
         {partner && (
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 sm:ml-[97px]">
+            {/* 線上狀態圓點 */}
+            {partner?.uid && (
+              <div 
+                className={`w-3 h-3 rounded-full ${
+                  isOnline ? "bg-green-500" : "bg-gray-300"
+                }`}
+                title = {isOnline ? "線上" : "離線"}
+                ></div>
+            )}
+
             <img
               src={partner.avatarUrl}
               alt="對方頭像"
-              className="w-15 h-15 rounded-full object-cover sm:ml-[97px]"
+              className="w-15 h-15 rounded-full object-cover "
             />
             <div className="text-sm font-semibold text-gray-800">{partner.name}</div>
           </div>

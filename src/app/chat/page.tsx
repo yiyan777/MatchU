@@ -125,7 +125,7 @@ export default function ChatListPage() {
               
               <div 
                 className={`mr-2 ml-1 flex flex-nowrap text-sm ${
-                  onlineMap[match.otherUser.uid] ? "text-green-500" : "text-gray-400"
+                  onlineMap[match.otherUser.uid] ? "text-green-600" : "text-gray-400"
                 }`}
                 >
                   {onlineMap[match.otherUser.uid] ? "線上" : "離線"}
