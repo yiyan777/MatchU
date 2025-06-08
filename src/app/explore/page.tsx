@@ -35,12 +35,24 @@ export default function ExplorePage() {
       if (userData?.gender) {
         setCurrentUserGender(userData.gender);
         const targetGender = userData.gender === "male" ? "female" : "male";
+
+        // 取得48小時內按讚過的人
+        const now = new Date();
+        const fortyEightHoursAgo = new Date(now.getTime() - 48 * 60 * 60 *1000);
+        const likesSnap = await getDocs(query(
+          collection (db, "likes"),
+          where("from", "==", user.uid),
+          where("createdAt", ">=", fortyEightHoursAgo)
+        ));
+        const likedUserIds = likesSnap.docs.map(doc => doc.data().to);
+
+        // 查詢異性並排除48小時內按過讚的人
         const q = query(collection(db, "users"), where("gender", "==", targetGender));
         const snap = await getDocs(q);
         const list = snap.docs.map(doc => ({
           ...doc.data(),
           uid: doc.id  // 將 UID 放進資料
-        }));
+        })).filter(person => !likedUserIds.includes(person.uid)); // 過濾掉最近按過的人
         setCandidates(shuffle(list)); // 自訂 shuffle 函式
       }
 
@@ -56,6 +68,7 @@ export default function ExplorePage() {
 
   const next = () => {
     setCurrentIndex((prev) => (prev + 1) % candidates.length);
+    setPhotoIndex(0);  // 查看新的對象時，重設照片為第一張
   };
 
   const handleLike = async () => {
@@ -96,8 +109,12 @@ export default function ExplorePage() {
       setShowHeart(true);
 
       setTimeout(() => {
-        setShowHeart(false); 
-        next(); 
+        setShowHeart(false);
+        
+        setCandidates((prev) => prev.filter(p => p.uid !== person.uid));
+        setCurrentIndex(0); // 重設 index，從新的清單第一位開始看
+        setPhotoIndex(0); // 重設照片輪播為第一張
+        
       }, 500);
     } catch (error) {
       console.log("按讚失敗", error);
@@ -152,6 +169,7 @@ export default function ExplorePage() {
                   fill
                   className="object-cover"
                   unoptimized
+                  priority
                 />
               </div>
             ) : ( 
