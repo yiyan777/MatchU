@@ -150,12 +150,12 @@ export default function ExplorePage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-between">
+    <div className="min-h-screen flex flex-col justify-between bg-[url('/explore-bg.jpg')] bg-cover">
       <Navbar />
       <main className="relative mt-[80px] flex flex-col items-center p-4">
         <div className="
           w-full max-w-[300px] border border-gray-300 px-8 py-5 rounded 
-          shadow-lg bg-white flex flex-col gap-2"
+          shadow-lg flex flex-col gap-2 bg-white/50"
           >
           
           {/* 頭貼輪播 */}
@@ -181,10 +181,10 @@ export default function ExplorePage() {
             {totalPhotos > 1 && (
               <>
                 <button onClick={handlePrevPhoto} className="absolute left-[10px]">
-                  <img src="/arrows/left-arrow.png" alt="左箭頭" width={24} className="cursor-pointer" />
+                  <img src="/arrows/left-arrow.png" alt="左箭頭" width={24} className="cursor-pointer opacity-30" />
                 </button>
                 <button onClick={handleNextPhoto} className="absolute right-[10px]">
-                  <img src="/arrows/right-arrow.png" alt="右箭頭" width={24} className="cursor-pointer" />
+                  <img src="/arrows/right-arrow.png" alt="右箭頭" width={24} className="cursor-pointer opacity-30" />
                 </button>
               </>
             )}
@@ -270,7 +270,6 @@ export default function ExplorePage() {
 
 
       </main>
-      <Footer />
     </div>
   );
 }

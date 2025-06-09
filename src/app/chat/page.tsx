@@ -110,66 +110,68 @@ export default function ChatListPage() {
   }, []);
 
   return (
-    <div className="p-4 max-w-xl mx-auto">
-      <Navbar />
-      <h1 className="text-2xl font-bold mb-4">聊天室</h1>
-      <div className="space-y-4">
-        {matches.map((match) => (
-          <Link key={match.id} href={`/chat/${match.id}`}>
-            <div className="flex items-center p-3 rounded-lg shadow hover:bg-gray-100 cursor-pointer mt-[40px]">
-              <img
-                src={match.otherUser.avatarUrl}
-                alt="頭像"
-                className="w-12 h-12 rounded-full object-cover mr-1"
-              />
-              
-              <div 
-                className={`mr-2 ml-1 flex flex-nowrap text-sm ${
-                  onlineMap[match.otherUser.uid] ? "text-green-600" : "text-gray-400"
-                }`}
-                >
-                  {onlineMap[match.otherUser.uid] ? "線上" : "離線"}
-              </div>
+    <div className="bg-purple-100 min-h-screen">
+      <div className="p-4 max-w-xl mx-auto">
+        <Navbar />
+        <h1 className="text-2xl font-bold mb-4">聊天室</h1>
+        <div className="space-y-4 bg-white rounded-lg">
+          {matches.map((match) => (
+            <Link key={match.id} href={`/chat/${match.id}`}>
+              <div className="flex items-center p-3 rounded-lg shadow hover:bg-gray-100 cursor-pointer mt-[40px]">
+                <img
+                  src={match.otherUser.avatarUrl}
+                  alt="頭像"
+                  className="w-12 h-12 rounded-full object-cover mr-1"
+                />
+                
+                <div 
+                  className={`mr-2 ml-1 flex flex-nowrap text-sm ${
+                    onlineMap[match.otherUser.uid] ? "text-green-600" : "text-gray-400"
+                  }`}
+                  >
+                    {onlineMap[match.otherUser.uid] ? "線上" : "離線"}
+                </div>
 
-              <div className="flex-1 min-w-0">
-                <div className="mt-1">
+                <div className="flex-1 min-w-0">
+                  <div className="mt-1">
 
-                  <span className="mr-2 font-semibold">{match.otherUser.name}</span>
+                    <span className="mr-2 font-semibold">{match.otherUser.name}</span>
 
-                  {match.unreadCount > 0 && (
-                    <span className="mr-2 bg-green-500 text-white text-xs px-2 py-0.5 rounded-full">
-                      {match.unreadCount}
+                    {match.unreadCount > 0 && (
+                      <span className="mr-2 bg-green-500 text-white text-xs px-2 py-0.5 rounded-full">
+                        {match.unreadCount}
+                      </span>
+                    )}
+                    <span className="block truncate text-gray-700">
+                      {match.lastMessage || "開始聊天吧！"}
                     </span>
-                  )}
-                  <span className="block truncate text-gray-700">
-                    {match.lastMessage || "開始聊天吧！"}
-                  </span>
-                  
-                 </div>   
+                    
+                  </div>   
 
+                </div>
+                <div className="text-xs text-gray-400 text-right">
+                  {match.lastUpdated && (
+                    <>
+                      <div>
+                        {new Date(match.lastUpdated).toLocaleDateString("zh-TW", {
+                          month: "2-digit",
+                          day: "2-digit",
+                      })}
+                      </div>
+                      <div>
+                        {new Date(match.lastUpdated).toLocaleTimeString("zh-TW", {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                          hour12: false,
+                      })}
+                      </div>            
+                    </>
+                  )}
+                </div>
               </div>
-              <div className="text-xs text-gray-400 text-right">
-                {match.lastUpdated && (
-                  <>
-                    <div>
-                      {new Date(match.lastUpdated).toLocaleDateString("zh-TW", {
-                        month: "2-digit",
-                        day: "2-digit",
-                    })}
-                    </div>
-                    <div>
-                      {new Date(match.lastUpdated).toLocaleTimeString("zh-TW", {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                        hour12: false,
-                    })}
-                    </div>            
-                  </>
-                )}
-              </div>
-            </div>
-          </Link>
-        ))}
+            </Link>
+          ))}
+        </div>
       </div>
     </div>
   );
