@@ -154,7 +154,7 @@ export default function ExplorePage() {
       <Navbar />
       <main className="relative mt-[80px] flex flex-col items-center p-4">
         <div className="
-          w-full max-w-[300px] border border-gray-300 p-8 rounded 
+          w-full max-w-[300px] border border-gray-300 px-8 py-5 rounded 
           shadow-lg bg-white flex flex-col gap-2"
           >
           
@@ -203,17 +203,35 @@ export default function ExplorePage() {
           )}
           
           
-          <h2 className="text-xl text-purple-400 font-sans font-bold text-center mt-4">{person.name}</h2>
+          <div className="text-xl text-purple-400 font-sans font-bold text-center">{person.name}</div>
+          
+          <div className="flex justify-center gap-10 -mt-2 -mr-1">
+            <button className="cursor-pointer border border-gray-400 px-4 py-2
+              rounded-full hover:bg-purple-100 text-sm"
+              onClick={handleLike}
+            >
+              like
+            </button>
+
+            <button
+              className="cursor-pointer border border-gray-400 px-4 
+                py-2 rounded-full hover:bg-purple-100 text-sm"
+              onClick={next}
+            >
+              next
+            </button>
+          </div>          
+          
           <div className="text-sm mt-2 text-gray-600">
-            <p className="font-medium mb-1">自我介紹：</p>
-            <p>{person.intro || "尚未填寫"}</p>  
+            <p className="font-medium mb-1">♡ 自我介紹：</p>
+            <p className="pl-[8px]">{person.intro || "尚未填寫"}</p>  
           </div>
 
           <hr  className="border-gray-300 border-0.5"/>
 
           <div className="text-sm text-center mt-1 text-gray-600 flex flex-wrap">
-            <span className="font-medium">我的興趣：</span>
-            <div>
+            <span className="font-medium mb-2">♡ 我的興趣：</span>
+            <div className="flex flex-wrap gap-2">
               {person.interests && person.interests.length > 0 ? (
                 person.interests.map((interest: string, index: number) => (
                   <span
@@ -231,7 +249,12 @@ export default function ExplorePage() {
 
           <hr  className="border-gray-300 border-0.5"/>
 
-          <p className="text-sm text-gray-600"><span className="font-medium">生活地點</span>：{person.location}</p>
+          <p className="text-sm text-gray-600"><span className="font-medium">♡ 生活地點</span>：{person.location}</p>
+          <hr  className="border-gray-300 border-0.5"/>
+          <p className="text-sm text-gray-600"><span className="font-medium">♡ 星座</span>：{person.zodiacSign ? person.zodiacSign : "尚未填寫"} </p>
+          <hr  className="border-gray-300 border-0.5"/>
+          <p className="text-sm text-gray-600"><span className="font-medium">♡ 職業</span>：{person.occupation ? person.occupation : "尚未填寫"} </p>
+        
         </div>  
         
         {showHeart && (
@@ -244,22 +267,7 @@ export default function ExplorePage() {
           </div>
         )}
 
-        <div className="mt-6 flex gap-5">
-          <button className="cursor-pointer border border-gray-400 px-4 py-2
-            rounded-full hover:bg-purple-100 text-sm"
-            onClick={handleLike}
-          >
-            like
-          </button>
 
-          <button
-            className="cursor-pointer border border-gray-400 px-4 
-              py-2 rounded-full hover:bg-purple-100 text-sm"
-            onClick={next}
-          >
-            next
-          </button>
-        </div>
 
       </main>
       <Footer />

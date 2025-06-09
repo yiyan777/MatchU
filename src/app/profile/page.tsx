@@ -46,7 +46,7 @@ export default function ProfilePage() {
       <Navbar />
       <main className="
         p-6 max-w-sm mx-auto mt-[80px] border border-gray-300 
-        rounded shadow-md"
+        rounded shadow-md "
       >
         <h1 className="text-2xl text-center mb-6 text-gray-500 font-sans font-bold">
           我的個人資料
@@ -58,7 +58,7 @@ export default function ProfilePage() {
             <img
               src={userData.avatarUrls[currentIndex]}
               alt="頭貼"
-              className="w-[100px] h-[130px] mx-auto object-cover rounded shadow"
+              className="w-[100px] h-[150px] mx-auto object-cover rounded shadow"
             />
 
             {userData.avatarUrls.length > 1 && currentIndex > 0 && (
@@ -87,7 +87,7 @@ export default function ProfilePage() {
           <div><strong>*Email：</strong>{userData.email}</div>
           <div><strong>*自我介紹：</strong>{userData.intro || "尚未填寫"}</div>
 
-          <div>
+          <div className="max-w-[450px]">
             <strong>*興趣：</strong>
             <div className="flex flex-wrap gap-2 mt-1">
               {userData.interests && userData.interests.length > 0 ? (
@@ -105,6 +105,8 @@ export default function ProfilePage() {
           </div>
 
           <div><strong>*地點：</strong>{userData.location || "尚未填寫"}</div>
+          <div><strong>*星座：</strong>{userData.zodiacSign || "尚未填寫"}</div> 
+          <div><strong>*職業：</strong>{userData.occupation || "尚未填寫"}</div>
         </div>
       </main>
       <div className="flex justify-center gap-3 my-[20px] sm:mt-[40px]">

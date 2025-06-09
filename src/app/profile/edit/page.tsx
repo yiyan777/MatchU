@@ -18,6 +18,8 @@ export default function EditProfilePage() {
     interests: [] as string[], // 調整興趣格式，從字串改成陣列
     gender: "",
     avatarUrls: [] as string[], // 改支援多張圖片
+    zodiacSign: "", // 星座
+    occupation: "", // 職業
   });
   const [interestInput, setInterestInput] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -51,6 +53,8 @@ export default function EditProfilePage() {
             interests: data.interests || [],
             gender: data.gender || "",
             avatarUrls,
+            zodiacSign: data.zodiacSign || "",
+            occupation: data.occupation || "",
           });
         }
       } else {
@@ -114,6 +118,8 @@ export default function EditProfilePage() {
       gender: formData.gender,
       interests: formData.interests,
       avatarUrls: formData.avatarUrls,
+      zodiacSign: formData.zodiacSign,
+      occupation: formData.occupation,
     });
 
     router.push("/profile");
@@ -199,7 +205,7 @@ export default function EditProfilePage() {
           />
         </label>
 
-        <label className="block mb-3">
+        <label className="block mb-3 max-w-[350px]">
           興趣：
           <div className="flex flex-wrap gap-2 mt-1 mb-2">
             {formData.interests.map((tag, index) => (
@@ -279,6 +285,42 @@ export default function EditProfilePage() {
             <option value="male">男性</option>
             <option value="female">女性</option>
           </select>
+        </label>
+        
+        <label className="block mb-4">
+          星座：
+          <select
+            name="zodiacSign"
+            value={formData.zodiacSign}
+            onChange={handleChange}
+            className="block w-full border border-gray-400 rounded p-2 mt-1 cursor-pointer"
+          >
+            <option value="">請選擇</option>
+            <option value="摩羯座">摩羯座</option>
+            <option value="水瓶座">水瓶座</option>
+            <option value="雙魚座">雙魚座</option>
+            <option value="牡羊座">牡羊座</option>
+            <option value="金牛座">金牛座</option>
+            <option value="雙子座">雙子座</option>
+            <option value="巨蟹座">巨蟹座</option>
+            <option value="獅子座">獅子座</option>
+            <option value="處女座">處女座</option>
+            <option value="天秤座">天秤座</option>
+            <option value="天蠍座">天蠍座</option>
+            <option value="射手座">射手座</option>
+          </select>  
+        </label>
+        
+        <label className="block mb-4">
+          職業：
+          <input
+            type="text"
+            name="occupation"
+            value={formData.occupation}
+            onChange={handleChange}
+            className="block w-full border border-gray-400 rounded p-2 mt-1"
+            placeholder="請輸入您的職業"
+          />
         </label>
       </main>
 
