@@ -191,78 +191,80 @@ export default function ChatRoomPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col p-4 mt-[80px] max-w-md mx-auto">
-			<Navbar partner={partner} />
+		<div className="bg-[url('/chat-bg.jpg')] bg-auto bg-repeat">
+			<div className="min-h-screen flex flex-col p-4 mt-[80px] max-w-md mx-auto">
+				<Navbar partner={partner} />
 
-      <div className="flex-1 overflow-y-auto space-y-3 border p-3 rounded bg-white shadow border-gray-300 border-1">
-        {messages.map((msg, index) => {
-					const isMe = msg.sender === currentUserId;
-					const dateObj = msg.createdAt?.toDate?.();
-					const dateStr = dateObj ? formatDateHeader(dateObj) : "";
+				<div className="flex-1 overflow-y-auto space-y-3 border p-3 rounded bg-white shadow border-gray-300 border-1 bg-white/90">
+					{messages.map((msg, index) => {
+						const isMe = msg.sender === currentUserId;
+						const dateObj = msg.createdAt?.toDate?.();
+						const dateStr = dateObj ? formatDateHeader(dateObj) : "";
 
-					const time = msg.createdAt?.toDate?.().toLocaleTimeString("zh-TW", {
-						hour: "2-digit",
-						minute: "2-digit",
-						hour12: false,
-					}) || "";
+						const time = msg.createdAt?.toDate?.().toLocaleTimeString("zh-TW", {
+							hour: "2-digit",
+							minute: "2-digit",
+							hour12: false,
+						}) || "";
 
-					// 判斷是否顯示日期分隔
-					const prevMsg = messages[index - 1];
-					const prevDateStr = prevMsg?.createdAt?.toDate?.() ? formatDateHeader(prevMsg.createdAt.toDate()) : "";
+						// 判斷是否顯示日期分隔
+						const prevMsg = messages[index - 1];
+						const prevDateStr = prevMsg?.createdAt?.toDate?.() ? formatDateHeader(prevMsg.createdAt.toDate()) : "";
 
-					const showDateHeader = index === 0 || dateStr !== prevDateStr;
+						const showDateHeader = index === 0 || dateStr !== prevDateStr;
 
-					return(
-						<div key={index}>
-							{showDateHeader && (
-								<div className="text-center text-sm text-gray-500 my-3">
-									{dateStr}
-								</div>
-							)}						
-							<div className={`flex items-end ${isMe ? "justify-end" : "justify-start"}`}>
-								<div className={`flex items-end gap-1 ${isMe ? "flex-row-reverse" : ""}`}>
-									{!isMe && partner && (
-										<img 
-											src={partner.avatarUrl} 
-											alt="對方頭像" 
-											className="w-8 h-8 rounded-full object-cover"
-										/>
-									)}
-									<div 
-										className={`py-2 px-2 rounded-md max-w-[85%] text-sm ${
-											isMe ? "bg-purple-100 text-left"
-											: "bg-purple-100 text-left "
-										}`}
-									>
-										{msg.content}
+						return(
+							<div key={index}>
+								{showDateHeader && (
+									<div className="text-center text-sm text-gray-500 my-3">
+										{dateStr}
 									</div>
-									<span className="text-xs text-gray-500 whitespace-nowrap">
-										{time}
-									</span>
+								)}						
+								<div className={`flex items-end ${isMe ? "justify-end" : "justify-start"}`}>
+									<div className={`flex items-end gap-1 ${isMe ? "flex-row-reverse" : ""}`}>
+										{!isMe && partner && (
+											<img 
+												src={partner.avatarUrl} 
+												alt="對方頭像" 
+												className="w-8 h-8 rounded-full object-cover"
+											/>
+										)}
+										<div 
+											className={`py-2 px-2 rounded-md max-w-[85%] text-sm ${
+												isMe ? "bg-purple-100 text-left"
+												: "bg-purple-100 text-left "
+											}`}
+										>
+											{msg.content}
+										</div>
+										<span className="text-xs text-gray-500 whitespace-nowrap">
+											{time}
+										</span>
+									</div>
 								</div>
 							</div>
-						</div>
-					);
-				})}
-				<div ref={messagesEndRef} />
-      </div>
-			
-			<div className="flex mt-4">
-				<input 
-					type="text"
-					value={input}
-					onChange={(e) => setInput(e.target.value)}
-					onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-					className="flex-1 border p-2 rounded-l-md border-gray-300"
-					placeholder="輸入訊息..."
-				/>
-				<button
-					onClick={sendMessage}
-					className="bg-purple-500 text-white px-4 rounded-r-md cursor-pointer"
-				>
-					傳送
-				</button>
+						);
+					})}
+					<div ref={messagesEndRef} />
+				</div>
+				
+				<div className="flex mt-4">
+					<input 
+						type="text"
+						value={input}
+						onChange={(e) => setInput(e.target.value)}
+						onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+						className="flex-1 border p-2 rounded-l-md border-gray-300"
+						placeholder="輸入訊息..."
+					/>
+					<button
+						onClick={sendMessage}
+						className="bg-purple-500 text-white px-4 rounded-r-md cursor-pointer"
+					>
+						傳送
+					</button>
+				</div>
 			</div>
-    </div>
+		</div>
   );
 }
