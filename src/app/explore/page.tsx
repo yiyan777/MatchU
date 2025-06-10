@@ -34,6 +34,7 @@ export default function ExplorePage() {
 
       if (userData?.gender) {
         setCurrentUserGender(userData.gender);
+         
         const targetGender = userData.gender === "male" ? "female" : "male";
 
         // 取得48小時內按讚過的人
@@ -150,12 +151,15 @@ export default function ExplorePage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-between bg-[url('/explore-bg.jpg')] bg-cover">
+    <div className={`min-h-screen flex flex-col justify-between  
+      ${currentUserGender === "male" ? 
+      "bg-[url('/explore-bg.jpg')] bg-top" : "bg-[url('/explore-bg2.jpg')] bg-cover"}`}>
+      
       <Navbar />
       <main className="relative mt-[80px] flex flex-col items-center p-4">
         <div className="
           w-full max-w-[300px] border border-gray-300 px-8 py-5 rounded 
-          shadow-lg flex flex-col gap-2 bg-white/70"
+          shadow-lg flex flex-col gap-2 bg-white/80"
           >
           
           {/* 頭貼輪播 */}
