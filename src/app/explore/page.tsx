@@ -185,10 +185,10 @@ export default function ExplorePage() {
 
             {totalPhotos > 1 && (
               <>
-                <button onClick={handlePrevPhoto} className="absolute left-[10px]">
+                <button onClick={handlePrevPhoto} className="absolute left-[18px]">
                   <ChevronLeftIcon className="w-6 h-6 text-gray-500 opacity-60 hover:opacity-100 cursor-pointer" />
                 </button>
-                <button onClick={handleNextPhoto} className="absolute right-[10px]">
+                <button onClick={handleNextPhoto} className="absolute right-[18px]">
                   <ChevronRightIcon className="w-6 h-6 text-gray-500 opacity-60 hover:opacity-100 cursor-pointer" />
                 </button>
               </>
