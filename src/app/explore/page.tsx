@@ -153,7 +153,7 @@ export default function ExplorePage() {
   return (
     <div className={`min-h-screen flex flex-col justify-between  
       ${currentUserGender === "male" ? 
-      "bg-[url('/explore-bg.jpg')] bg-top" : "bg-[url('/explore-bg2.jpg')] bg-cover"}`}>
+      "bg-[url('/explore-bg.jpg')] bg-top" : "bg-[url('/explore-bg2.jpg')] bg-top"}`}>
       
       <Navbar />
       <main className="relative mt-[80px] flex flex-col items-center p-4">
