@@ -155,7 +155,7 @@ export default function ExplorePage() {
       <main className="relative mt-[80px] flex flex-col items-center p-4">
         <div className="
           w-full max-w-[300px] border border-gray-300 px-8 py-5 rounded 
-          shadow-lg flex flex-col gap-2 bg-white/50"
+          shadow-lg flex flex-col gap-2 bg-white/70"
           >
           
           {/* 頭貼輪播 */}
