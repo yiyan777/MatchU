@@ -18,8 +18,16 @@ export default function ProfilePage() {
   const [loading, setLoading] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
   const hasMatch = useHasMatch();
-
   const router = useRouter();
+  const total = userData?.avatarUrls?.length || 0;
+  
+  const handlePrev = () => {
+    setCurrentIndex((prev) => (prev === 0 ? total -1 : prev -1 ));
+  };
+
+  const handleNext = () => {
+    setCurrentIndex((prev) => (prev === total -1 ? 0 : prev + 1));
+  };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -52,35 +60,65 @@ export default function ProfilePage() {
         <h1 className="text-2xl text-center mb-6 text-gray-500 font-sans font-bold">
           我的個人資料
         </h1>
-
-        {/* 頭貼輪播顯示 */}
+  
         {userData.avatarUrls && userData.avatarUrls.length > 0 && (
-          <div className="relative flex justify-center items-center mb-4">
-            <img
-              src={userData.avatarUrls[currentIndex]}
-              alt="頭貼"
-              className="w-[100px] h-[150px] mx-auto object-cover rounded shadow"
-            />
+          <>
+            {/* 頭貼輪播容器：圖片 + 箭頭定位點 */}
+            <div className="relative mx-auto mb-3">
+              <div className="relative w-28 h-44 rounded-md shadow-md mx-auto">
+                {userData.avatarUrls[currentIndex] ? (
+                  <Image
+                    src={userData.avatarUrls[currentIndex]}
+                    alt="頭貼"
+                    fill
+                    className="object-cover"
+                    unoptimized
+                    priority
+                  />
+                ) : (
+                  <div className="w-full h-full bg-gray-100 flex items-center justify-center text-sm text-gray-400">
+                    無頭像
+                  </div>
+                )}
 
-            {userData.avatarUrls.length > 1 && currentIndex > 0 && (
-              <button
-                onClick={() => setCurrentIndex(currentIndex - 1)}
-                className="absolute left-[40px] sm:left-[70px] text-xl"
-              >
-                <ChevronLeftIcon className="w-6 h-6 text-gray-500 opacity-60 hover:opacity-100 cursor-pointer" />
-              </button>
-            )}
+                {/* 左箭頭 */}
+                <button
+                  onClick={handlePrev}
+                  className="absolute -left-10 top-1/2 -translate-y-1/2"
+                >
+                  <ChevronLeftIcon className="w-6 h-6 text-gray-600 opacity-70 hover:opacity-100 cursor-pointer" />
+                </button>
 
-            {userData.avatarUrls.length > 1 && currentIndex < userData.avatarUrls.length - 1 && (
-              <button
-                onClick={() => setCurrentIndex(currentIndex + 1)}
-                className="absolute right-[40px] sm:right-[70px] text-xl"
-              >
-                <ChevronRightIcon className="w-6 h-6 text-gray-500 opacity-60 hover:opacity-100 cursor-pointer" />
-              </button>
+                {/* 右箭頭 */}
+                <button
+                  onClick={handleNext}
+                  className="absolute -right-10 top-1/2 -translate-y-1/2"
+                >
+                  <ChevronRightIcon className="w-6 h-6 text-gray-600 opacity-70 hover:opacity-100 cursor-pointer" />
+                </button>
+                
+              </div>
+            </div>
+
+            {/* dot indicators */}
+            {userData.avatarUrls.length > 1 && (
+              <div className="flex justify-center gap-2 mb-4">
+                {userData.avatarUrls.map((_: string, idx: number) => (
+                  <span
+                    key={idx}
+                    className={`w-2 h-2 rounded-full ${
+                      idx === currentIndex ? "bg-purple-500" : "bg-gray-300"
+                    }`}
+                  />
+                ))}
+              </div>
             )}
-          </div>
+          </>
         )}
+
+
+
+
 
         <div className="flex justify-center gap-3 my-[20px] sm:mt-[20px]">
           <button 
