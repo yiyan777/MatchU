@@ -89,11 +89,7 @@ export default function Home() {
           </div>
         </div>
       </main>
-      {/* <div className="animate-bounce">動畫測試1</div>
-      <div className="text-3xl font-bold text-red-500 animate-bounce">
-        動畫測試2
-      </div>
-      <div className="text-red-500 text-3xl font-bold">Hello Tailwind</div> */}
+
       <Footer />
     </div>
   );

@@ -11,6 +11,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Image from "next/image";
 import { useHasMatch } from "@/hooks/useHasMatch";
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/solid';
 
 export default function ProfilePage() {
   const [userData, setUserData] = useState<any>(null);
@@ -42,11 +43,11 @@ export default function ProfilePage() {
   if (!userData) return <div className="text-center mt-10">尚未登入或找不到資料。</div>;
 
   return (
-    <div className="min-h-screen flex flex-col m-auto">
+    <div className="min-h-screen flex flex-col m-auto bg-purple-100">
       <Navbar />
       <main className="
         p-6 max-w-sm mx-auto mt-[80px] border border-gray-300 
-        rounded shadow-md "
+        rounded shadow-md bg-white"
       >
         <h1 className="text-2xl text-center mb-6 text-gray-500 font-sans font-bold">
           我的個人資料
@@ -66,7 +67,7 @@ export default function ProfilePage() {
                 onClick={() => setCurrentIndex(currentIndex - 1)}
                 className="absolute left-[40px] sm:left-[70px] text-xl"
               >
-                <img src="/arrows/left-arrow.png" alt="左箭頭" width={30} className="cursor-pointer" />
+                <ChevronLeftIcon className="w-6 h-6 text-gray-500 opacity-60 hover:opacity-100 cursor-pointer" />
               </button>
             )}
 
@@ -75,12 +76,31 @@ export default function ProfilePage() {
                 onClick={() => setCurrentIndex(currentIndex + 1)}
                 className="absolute right-[40px] sm:right-[70px] text-xl"
               >
-                <img src="/arrows/right-arrow.png" alt="右箭頭" width={30} className="cursor-pointer" />
+                <ChevronRightIcon className="w-6 h-6 text-gray-500 opacity-60 hover:opacity-100 cursor-pointer" />
               </button>
             )}
           </div>
         )}
 
+        <div className="flex justify-center gap-3 my-[20px] sm:mt-[20px]">
+          <button 
+            className="
+              cursor-pointer border border-gray-400 px-4 
+              py-2 rounded-full hover:bg-purple-100 text-sm"
+              onClick={()=> router.push("/profile/edit") }
+              >
+                編輯個人資料
+            </button>
+
+          <button 
+            className="
+              cursor-pointer border border-gray-400 px-4 
+              py-2 rounded-full hover:bg-purple-100 text-sm"
+              onClick={()=> router.push("/explore") }
+              >
+                開始認識新朋友
+            </button>          
+        </div>
         {/* 文字資料 */}
         <div className="space-y-2 text-gray-700 text-md">
           <div><strong>*暱稱：</strong>{userData.name || "未命名"}</div>
@@ -109,26 +129,6 @@ export default function ProfilePage() {
           <div><strong>*職業：</strong>{userData.occupation || "尚未填寫"}</div>
         </div>
       </main>
-      <div className="flex justify-center gap-3 my-[20px] sm:mt-[40px]">
-        <button 
-          className="
-            cursor-pointer border border-gray-400 px-4 
-            py-2 rounded-full hover:bg-purple-100 text-sm"
-            onClick={()=> router.push("/profile/edit") }
-            >
-              編輯個人資料
-          </button>
-
-        <button 
-          className="
-            cursor-pointer border border-gray-400 px-4 
-            py-2 rounded-full hover:bg-purple-100 text-sm"
-            onClick={()=> router.push("/explore") }
-            >
-              開始認識新朋友
-          </button>          
-      </div>
-
       <Footer />
     </div>
   );

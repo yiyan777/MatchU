@@ -140,7 +140,7 @@ export default function Navbar({
 
     return (
       <nav className="flex justify-between items-center mb-1 sm:px-4 fixed top-0 left-0 right-0 
-        bg-white w-full h-[80px] z-50 border-b-1 border-gray-200">
+        bg-white w-full h-[80px] z-50 border-b-1 border-gray-200 shadow-sm">
         <Link href="/" className="cursor-pointer flex flex-col items-center justify-center">
           <img src="/butterfly.svg" alt="蝴蝶" className="w-20 h-12"/>  
           <div className="text-purple-600 text-md title pr-[2px]">MatchU</div>

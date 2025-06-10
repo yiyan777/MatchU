@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { addDoc, serverTimestamp } from "firebase/firestore";
 import { useHasMatch } from "@/hooks/useHasMatch";
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/solid';
 
 
 export default function ExplorePage() {
@@ -185,10 +186,10 @@ export default function ExplorePage() {
             {totalPhotos > 1 && (
               <>
                 <button onClick={handlePrevPhoto} className="absolute left-[10px]">
-                  <img src="/arrows/left-arrow.png" alt="左箭頭" width={24} className="cursor-pointer opacity-30" />
+                  <ChevronLeftIcon className="w-6 h-6 text-gray-500 opacity-60 hover:opacity-100 cursor-pointer" />
                 </button>
                 <button onClick={handleNextPhoto} className="absolute right-[10px]">
-                  <img src="/arrows/right-arrow.png" alt="右箭頭" width={24} className="cursor-pointer opacity-30" />
+                  <ChevronRightIcon className="w-6 h-6 text-gray-500 opacity-60 hover:opacity-100 cursor-pointer" />
                 </button>
               </>
             )}
@@ -255,9 +256,9 @@ export default function ExplorePage() {
 
           <p className="text-sm text-gray-600"><span className="font-medium">♡ 生活地點</span>：{person.location}</p>
           <hr  className="border-gray-300 border-0.5"/>
-          <p className="text-sm text-gray-600"><span className="font-medium">♡ 星座</span>：{person.zodiacSign ? person.zodiacSign : "尚未填寫"} </p>
+          <p className="text-sm text-gray-600"><span className="font-medium">♡ 星座</span>：{person.zodiacSign ? person.zodiacSign : <span className="text-gray-400">尚未填寫</span> }</p>
           <hr  className="border-gray-300 border-0.5"/>
-          <p className="text-sm text-gray-600"><span className="font-medium">♡ 職業</span>：{person.occupation ? person.occupation : "尚未填寫"} </p>
+          <p className="text-sm text-gray-600"><span className="font-medium">♡ 職業</span>：{person.occupation ? person.occupation : <span className="text-gray-400">尚未填寫</span>} </p>
         
         </div>  
         
@@ -274,6 +275,7 @@ export default function ExplorePage() {
 
 
       </main>
+      <Footer />
     </div>
   );
 }
