@@ -54,7 +54,7 @@ export default function ProfilePage() {
     <div className="min-h-screen flex flex-col m-auto bg-purple-100">
       <Navbar />
       <main className="
-        p-6 max-w-sm mx-auto mt-[80px] border border-gray-300 
+        p-6 max-w-xs sm:max-w-sm  mx-auto mt-[80px] border border-gray-300 
         rounded shadow-md bg-white"
       >
         <h1 className="text-2xl text-center mb-6 text-gray-500 font-sans font-bold">
@@ -82,21 +82,24 @@ export default function ProfilePage() {
                 )}
 
                 {/* 左箭頭 */}
-                <button
-                  onClick={handlePrev}
-                  className="absolute -left-10 top-1/2 -translate-y-1/2"
-                >
-                  <ChevronLeftIcon className="w-6 h-6 text-gray-600 opacity-70 hover:opacity-100 cursor-pointer" />
-                </button>
+                {userData.avatarUrls && userData.avatarUrls.length > 1 && (
+                  <button
+                    onClick={handlePrev}
+                    className="absolute -left-10 top-1/2 -translate-y-1/2"
+                  >
+                    <ChevronLeftIcon className="w-6 h-6 text-gray-600 opacity-70 hover:opacity-100 cursor-pointer" />
+                  </button>
+                )}
 
                 {/* 右箭頭 */}
-                <button
-                  onClick={handleNext}
-                  className="absolute -right-10 top-1/2 -translate-y-1/2"
-                >
-                  <ChevronRightIcon className="w-6 h-6 text-gray-600 opacity-70 hover:opacity-100 cursor-pointer" />
-                </button>
-                
+                {userData.avatarUrls && userData.avatarUrls.length > 1 && (
+                  <button
+                    onClick={handleNext}
+                    className="absolute -right-10 top-1/2 -translate-y-1/2"
+                  >
+                    <ChevronRightIcon className="w-6 h-6 text-gray-600 opacity-70 hover:opacity-100 cursor-pointer" />
+                  </button>
+                )}
               </div>
             </div>
 

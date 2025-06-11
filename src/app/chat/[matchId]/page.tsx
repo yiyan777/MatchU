@@ -191,7 +191,7 @@ export default function ChatRoomPage() {
   };
 
   return (
-		<div className="bg-[url('/chat-bg.jpg')] bg-auto bg-repeat">
+		<div className="bg-[url('/chat-bg.jpg')] bg-cover bg-repeat">
 			<div className="min-h-screen flex flex-col p-4 mt-[80px] max-w-md mx-auto">
 				<Navbar partner={partner} />
 

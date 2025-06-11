@@ -129,9 +129,9 @@ export default function EditProfilePage() {
   if (loading) return <div className="text-center mt-10">載入中...</div>;
 
   return (
-    <div className="min-h-screen flex flex-col justify-between">
+    <div className="min-h-screen flex flex-col justify-between bg-purple-100">
       <Navbar />
-      <main className="p-6 max-w-lg mx-auto mt-[80px] border border-gray-300 rounded shadow-md bg-white">
+      <main className="p-6 max-w-xs sm:max-w-lg mx-auto mt-[80px] border border-gray-300 rounded shadow-md bg-white">
         <h1 className="text-2xl font-bold text-center mb-6 text-gray-500 font-sans font-bold">編輯個人資料</h1>
 
         {/* 頭貼輪播顯示 */}
@@ -147,7 +147,7 @@ export default function EditProfilePage() {
             {formData.avatarUrls.length > 1 && currentIndex > 0 && (
               <button
                 onClick={() => setCurrentIndex(currentIndex - 1)}
-                className="absolute left-[60px] text-xl"
+                className="absolute left-[60px] sm:left-[85px] text-xl"
               >
                 <ChevronLeftIcon className="w-6 h-6 text-gray-600 opacity-70 hover:opacity-100 cursor-pointer" />
               </button>
@@ -157,7 +157,7 @@ export default function EditProfilePage() {
             {formData.avatarUrls.length > 1 && currentIndex < formData.avatarUrls.length - 1 && (
               <button
                 onClick={() => setCurrentIndex(currentIndex + 1)}
-                className="absolute right-[60px] text-xl"
+                className="absolute right-[60px] sm:right-[85px] text-xl"
               >
                 <ChevronRightIcon className="w-6 h-6 text-gray-600 opacity-70 hover:opacity-100 cursor-pointer" />
               </button>
@@ -323,25 +323,24 @@ export default function EditProfilePage() {
             placeholder="請輸入您的職業"
           />
         </label>
+
+        <div className="flex flex-row justify-center gap-2 m-auto mt-5">
+          <button
+            onClick={handleSave}
+            className="cursor-pointer border border-gray-400 px-4 block
+            py-2 rounded-full hover:bg-gray-100 text-sm"
+          >
+            儲存
+          </button>
+          <button
+            onClick={()=> router.push("/profile")}
+            className="cursor-pointer border border-gray-400 px-4 block
+            py-2 rounded-full hover:bg-gray-100 text-sm"
+          >
+            返回
+          </button>
+        </div>
       </main>
-
-      <div className="flex flex-row gap-2 m-auto mt-5">
-        <button
-          onClick={handleSave}
-          className="cursor-pointer border border-gray-400 px-4 block
-          py-2 rounded-full hover:bg-gray-100 text-sm"
-        >
-          儲存
-        </button>
-        <button
-          onClick={()=> router.push("/profile")}
-          className="cursor-pointer border border-gray-400 px-4 block
-          py-2 rounded-full hover:bg-gray-100 text-sm"
-        >
-          返回
-        </button>
-      </div>
-
       <Footer />
     </div>
   );
