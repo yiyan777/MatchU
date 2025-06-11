@@ -9,6 +9,7 @@ import { doc, getDoc, updateDoc, deleteField } from "firebase/firestore";
 import { uploadAvatar } from "@/lib/uploadAvatar";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/solid';
 
 export default function EditProfilePage() {
   const [formData, setFormData] = useState({
@@ -146,9 +147,9 @@ export default function EditProfilePage() {
             {formData.avatarUrls.length > 1 && currentIndex > 0 && (
               <button
                 onClick={() => setCurrentIndex(currentIndex - 1)}
-                className="absolute left-[40px] text-xl"
+                className="absolute left-[60px] text-xl"
               >
-                <img src="/arrows/left-arrow.png" alt="左箭頭" width={30} className="cursor-pointer"/>
+                <ChevronLeftIcon className="w-6 h-6 text-gray-600 opacity-70 hover:opacity-100 cursor-pointer" />
               </button>
             )}
 
@@ -156,9 +157,9 @@ export default function EditProfilePage() {
             {formData.avatarUrls.length > 1 && currentIndex < formData.avatarUrls.length - 1 && (
               <button
                 onClick={() => setCurrentIndex(currentIndex + 1)}
-                className="absolute right-[40px] text-xl"
+                className="absolute right-[60px] text-xl"
               >
-                <img src="/arrows/right-arrow.png" alt="右箭頭" width={30} className="cursor-pointer"/>
+                <ChevronRightIcon className="w-6 h-6 text-gray-600 opacity-70 hover:opacity-100 cursor-pointer" />
               </button>
             )}
 
