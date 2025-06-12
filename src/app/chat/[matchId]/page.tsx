@@ -360,7 +360,7 @@ export default function ChatRoomPage() {
 							value={input}
 							onChange={(e) => setInput(e.target.value)}
 							onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-							className="flex-1 min-w-0 border p-2 rounded-l border-gray-300"
+							className="flex-1 min-w-0 border p-2 rounded-l border-purple-300"
 							placeholder="輸入訊息..."
 						/>
 

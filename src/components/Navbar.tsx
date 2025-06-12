@@ -185,7 +185,7 @@ export default function Navbar({
           </button>
           {/* 下拉選單 */}
           {menuOpen && (
-            <div className="absolute right-0 mt-2 bg-white rounded-xl shadow z-50 flex flex-col gap-2 p-2 w-26">
+            <div className="absolute right-0 mt-2 bg-white rounded-xl shadow z-50 flex flex-col gap-2 p-2 w-29">
               {buttons}
             </div>
           )}
