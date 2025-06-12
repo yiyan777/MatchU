@@ -21,10 +21,13 @@ import Navbar from "@/components/Navbar";
 import { useHasMatch } from "@/hooks/useHasMatch";
 import { formatDateHeader } from "@/utils/formatDateHeader";
 import { Timestamp } from "firebase/firestore";
+import { CameraIcon } from "@heroicons/react/24/solid";
+import { uploadImage} from "@/lib/uploadImage";
 
 type Message = {
 	sender: string;
-	content: string;
+	content?: string;  // 文字改為可選，讓使用者可以只傳圖片
+	imageUrl?: string;
 	createdAt: Timestamp;
 }
 
@@ -36,6 +39,7 @@ export default function ChatRoomPage() {
   const hasMatch = useHasMatch();
 	const messagesEndRef = useRef<HTMLDivElement | null>(null);
 	const [partner, setPartner] = useState<{ name: string; avatarUrl: string; uid: string} | null>(null);
+	const [enlargedImage, setEnlargedImage] = useState<string | null>(null);
 
 
   useEffect(() => {
@@ -150,6 +154,35 @@ export default function ChatRoomPage() {
     return () => unsubscribe();
   }, [matchId]);
 
+// 輸入訊息自動滾動到底部
+useEffect(() => {
+  if (messages.length === 0) return;
+  
+  const timeout = setTimeout(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, 100); // 加個微延遲，避免圖片或文字未載入完就滾動失敗
+
+  return () => clearTimeout(timeout);
+}, [messages]);
+
+// 按Esc關閉圖片
+useEffect(()=> {
+	const handleKeyDown = (e: KeyboardEvent) => {
+		if (e.key === "Escape") {
+			setEnlargedImage(null);
+		}
+	};
+
+	if (enlargedImage) {
+		document.addEventListener("keydown", handleKeyDown);
+	}
+
+	return () => {
+		document.removeEventListener("keydown", handleKeyDown);
+	};
+}, [enlargedImage]);
+
+
   const sendMessage = async () => {
     if (!input.trim() || !currentUserId) return;
 
@@ -190,12 +223,48 @@ export default function ChatRoomPage() {
     setInput(""); //清空輸入框
   };
 
+	async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
+		const file = e.target.files?.[0];
+		if (!file || !currentUserId) return;
+
+		const imageUrl = await uploadImage(file, currentUserId);
+		console.log("上傳成功 imageUrl：", imageUrl);
+
+		// 預先在畫面顯示圖片訊息（optimistic UI）
+		setMessages((prev) => [
+			...prev,
+			{
+				sender: currentUserId,
+				imageUrl,
+				createdAt: Timestamp.now(), // 本地時間先顯示
+			},
+		]);		
+		
+		const matchRef = doc(db, "matches", matchId as string);
+		const matchSnap = await getDoc(matchRef);
+		const matchData = matchSnap.data();
+		const otherUid = matchData?.userIds.find((id: string) => id !== currentUserId);
+
+		await addDoc(collection(matchRef, "messages"), {
+			sender: currentUserId,
+			imageUrl,
+			createdAt: serverTimestamp(),
+		});
+
+		await updateDoc(matchRef, {
+			lastMessage: "[圖片]",
+			lastUpdated: serverTimestamp(),
+			[`unreadCounts.${otherUid}`]: (matchData?.unreadCounts?.[otherUid] || 0) + 1
+		});
+
+	}
+
   return (
 		<div className="bg-[url('/chat-bg.jpg')] bg-cover bg-repeat">
 			<div className="min-h-screen flex flex-col p-4 mt-[80px] max-w-md mx-auto">
 				<Navbar partner={partner} />
 
-				<div className="flex-1 overflow-y-auto space-y-3 border p-3 rounded bg-white shadow border-gray-300 border-1 bg-white/90">
+				<div className="flex-1 overflow-hidden space-y-3 border p-3 rounded bg-white shadow border-gray-300 border-1 bg-white/90">
 					{messages.map((msg, index) => {
 						const isMe = msg.sender === currentUserId;
 						const dateObj = msg.createdAt?.toDate?.();
@@ -231,11 +300,20 @@ export default function ChatRoomPage() {
 										)}
 										<div 
 											className={`py-2 px-2 rounded-md max-w-[85%] text-sm ${
-												isMe ? "bg-purple-100 text-left"
-												: "bg-purple-100 text-left "
+												isMe ? `${msg.imageUrl ? "" : "bg-purple-100"} text-left`
+												: `${msg.imageUrl ? "" : "bg-purple-100"} text-left`
 											}`}
 										>
-											{msg.content}
+											{msg.imageUrl ? (
+												<img 
+													src={msg.imageUrl} 
+													alt="圖片訊息" 
+													className="max-w-[180px] rounded cursor-pointer"
+													onClick={() => setEnlargedImage(msg.imageUrl!)}
+												/>
+											) : (
+												msg.content
+											)}
 										</div>
 										<span className="text-xs text-gray-500 whitespace-nowrap">
 											{time}
@@ -248,23 +326,53 @@ export default function ChatRoomPage() {
 					<div ref={messagesEndRef} />
 				</div>
 				
-				<div className="flex mt-4">
+				<div className="flex overflow-hidden sticky bottom-0">
 					<input 
 						type="text"
 						value={input}
 						onChange={(e) => setInput(e.target.value)}
 						onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-						className="flex-1 border p-2 rounded-l-md border-gray-300"
+						className="flex-1 min-w-0 border p-2 rounded-l-md border-gray-300"
 						placeholder="輸入訊息..."
 					/>
+
+					<label 
+						className="bg-purple-400 hover:bg-purple-300 text-white cursor-pointer flex items-center px-3"
+						title="上傳圖片"
+					>
+						<CameraIcon className="w-5 h-5 text-white" />
+						<input
+							type="file"
+							accept="image/*"
+							onChange={handleImageUpload}
+							className="hidden"
+						/>
+					</label>
+
 					<button
 						onClick={sendMessage}
-						className="bg-purple-500 text-white px-4 rounded-r-md cursor-pointer"
+						className="bg-purple-500 text-white px-3 rounded-r-md cursor-pointer hover:bg-purple-600"
 					>
 						傳送
 					</button>
 				</div>
 			</div>
+			{enlargedImage && (
+				<div className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50">
+					<button
+						className="absolute top-4 right-4 text-white text-4xl cursor-pointer"
+						onClick={() => setEnlargedImage(null)}
+						aria-label="關閉圖片"
+					>
+						&times;
+					</button>
+					<img
+						src={enlargedImage}
+						alt="放大圖片"
+						className="max-w-[90%] max-h-[90%] rounded shadow-lg"
+					/>
+				</div>
+			)}
 		</div>
   );
 }
