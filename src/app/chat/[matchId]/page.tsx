@@ -160,7 +160,7 @@ useEffect(() => {
   
   const timeout = setTimeout(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, 100); // 加個微延遲，避免圖片或文字未載入完就滾動失敗
+  }, 150); // 加個微延遲，避免圖片或文字未載入完就滾動失敗
 
   return () => clearTimeout(timeout);
 }, [messages]);
@@ -252,7 +252,7 @@ useEffect(()=> {
 		});
 
 		await updateDoc(matchRef, {
-			lastMessage: "[圖片]",
+			lastMessage: "已傳送圖片",
 			lastUpdated: serverTimestamp(),
 			[`unreadCounts.${otherUid}`]: (matchData?.unreadCounts?.[otherUid] || 0) + 1
 		});
@@ -284,7 +284,9 @@ useEffect(()=> {
 			<div className="min-h-screen flex flex-col p-4 mt-[80px] max-w-md mx-auto">
 				<Navbar partner={partner} />
 
-				<div className="flex-1 overflow-hidden space-y-3 border p-3 rounded bg-white shadow border-gray-300 border-1 bg-white/90">
+				<div className="flex-1 overflow-hidden space-y-3 border 
+					p-3 rounded-tl rounded-tr bg-white shadow border-gray-300 border-1 bg-white/90 mb-11
+				">
 					{messages.map((msg, index) => {
 						const isMe = msg.sender === currentUserId;
 						const dateObj = msg.createdAt?.toDate?.();
@@ -346,35 +348,37 @@ useEffect(()=> {
 					<div ref={messagesEndRef} />
 				</div>
 				
-				<div className="flex overflow-hidden sticky bottom-0">
-					<input 
-						type="text"
-						value={input}
-						onChange={(e) => setInput(e.target.value)}
-						onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-						className="flex-1 min-w-0 border p-2 rounded-l-md border-gray-300"
-						placeholder="輸入訊息..."
-					/>
-
-					<label 
-						className="bg-purple-400 hover:bg-purple-300 text-white cursor-pointer flex items-center px-3"
-						title="上傳圖片"
-					>
-						<CameraIcon className="w-5 h-5 text-white" />
-						<input
-							type="file"
-							accept="image/*"
-							onChange={handleImageUpload}
-							className="hidden"
+				<div className="fixed bottom-0 left-0 right-0 z-50 mx-auto w-auto mb-5">
+					<div className="flex max-w-md mx-auto px-4">
+						<input 
+							type="text"
+							value={input}
+							onChange={(e) => setInput(e.target.value)}
+							onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+							className="flex-1 min-w-0 border p-2 rounded-l border-gray-300"
+							placeholder="輸入訊息..."
 						/>
-					</label>
 
-					<button
-						onClick={sendMessage}
-						className="bg-purple-500 text-white px-3 rounded-r-md cursor-pointer hover:bg-purple-600"
-					>
-						傳送
-					</button>
+						<label 
+							className="bg-purple-400 hover:bg-purple-300 text-white cursor-pointer flex items-center px-3"
+							title="上傳圖片"
+						>
+							<CameraIcon className="w-5 h-5 text-white" />
+							<input
+								type="file"
+								accept="image/*"
+								onChange={handleImageUpload}
+								className="hidden"
+							/>
+						</label>
+
+						<button
+							onClick={sendMessage}
+							className="bg-purple-500 text-white px-3 rounded-r cursor-pointer hover:bg-purple-600"
+						>
+							傳送
+						</button>
+					</div>
 				</div>
 			</div>
 			{enlargedImage && (
