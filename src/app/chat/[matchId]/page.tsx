@@ -106,7 +106,7 @@ export default function ChatRoomPage() {
 
 			setTimeout(() => {
 				messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-			}, 100);
+			}, 300);
 		});
 
 		// 設置增量監聽器，只監聽新增訊息
