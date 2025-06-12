@@ -259,6 +259,26 @@ useEffect(()=> {
 
 	}
 
+	function linkify(text: string) {
+		const urlRegex = /(https?:\/\/[^\s]+)/g;
+		return text.split(urlRegex).map((part, index) => {
+			if (part.match(urlRegex)) {
+				return (
+					<a
+						key={index}
+						href={part}
+						target="_blank"
+						rel="noopener noreferrer"
+						className="text-blue-500 underline hover:text-blue-700"
+					>
+						{part}
+					</a>
+				);
+			}
+			return part;
+		});
+	}
+
   return (
 		<div className="bg-[url('/chat-bg.jpg')] bg-cover bg-repeat">
 			<div className="min-h-screen flex flex-col p-4 mt-[80px] max-w-md mx-auto">
@@ -312,7 +332,7 @@ useEffect(()=> {
 													onClick={() => setEnlargedImage(msg.imageUrl!)}
 												/>
 											) : (
-												msg.content
+												<span>{msg.content && linkify(msg.content)}</span>
 											)}
 										</div>
 										<span className="text-xs text-gray-500 whitespace-nowrap">
