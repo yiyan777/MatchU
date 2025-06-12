@@ -154,33 +154,38 @@ export default function ChatRoomPage() {
     return () => unsubscribe();
   }, [matchId]);
 
-// 輸入訊息自動滾動到底部
-useEffect(() => {
-  if (messages.length === 0) return;
-  
-  const timeout = setTimeout(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, 150); // 加個微延遲，避免圖片或文字未載入完就滾動失敗
+	// 輸入訊息自動滾動到底部 文字訊息延遲100毫秒後滾動 圖片延遲300毫秒後滾動
+	useEffect(() => {
+		if (messages.length === 0) return;
 
-  return () => clearTimeout(timeout);
-}, [messages]);
+		const lastMessage = messages[messages.length - 1];
+		const isImage = !!lastMessage.imageUrl;
+		const delay = isImage ? 300 : 100;
 
-// 按Esc關閉圖片
-useEffect(()=> {
-	const handleKeyDown = (e: KeyboardEvent) => {
-		if (e.key === "Escape") {
-			setEnlargedImage(null);
+		const timeout = setTimeout(() => {
+			messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+		}, delay);
+
+		return () => clearTimeout(timeout);
+	}, [messages]);
+
+
+	// 按Esc關閉圖片
+	useEffect(()=> {
+		const handleKeyDown = (e: KeyboardEvent) => {
+			if (e.key === "Escape") {
+				setEnlargedImage(null);
+			}
+		};
+
+		if (enlargedImage) {
+			document.addEventListener("keydown", handleKeyDown);
 		}
-	};
 
-	if (enlargedImage) {
-		document.addEventListener("keydown", handleKeyDown);
-	}
-
-	return () => {
-		document.removeEventListener("keydown", handleKeyDown);
-	};
-}, [enlargedImage]);
+		return () => {
+			document.removeEventListener("keydown", handleKeyDown);
+		};
+	}, [enlargedImage]);
 
 
   const sendMessage = async () => {
@@ -348,7 +353,7 @@ useEffect(()=> {
 					<div ref={messagesEndRef} />
 				</div>
 				
-				<div className="fixed bottom-0 left-0 right-0 z-50 mx-auto w-auto mb-5">
+				<div className="fixed bottom-0 left-0 right-0 z-50 mx-auto w-auto mb-[20px]">
 					<div className="flex max-w-md mx-auto px-4">
 						<input 
 							type="text"
