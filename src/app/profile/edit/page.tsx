@@ -147,7 +147,7 @@ export default function EditProfilePage() {
             {formData.avatarUrls.length > 1 && currentIndex > 0 && (
               <button
                 onClick={() => setCurrentIndex(currentIndex - 1)}
-                className="absolute left-[60px] sm:left-[85px] text-xl"
+                className="absolute left-[60px] bottom-1/2 sm:left-[85px] text-xl"
               >
                 <ChevronLeftIcon className="w-6 h-6 text-gray-600 opacity-70 hover:opacity-100 cursor-pointer" />
               </button>
@@ -157,7 +157,7 @@ export default function EditProfilePage() {
             {formData.avatarUrls.length > 1 && currentIndex < formData.avatarUrls.length - 1 && (
               <button
                 onClick={() => setCurrentIndex(currentIndex + 1)}
-                className="absolute right-[60px] sm:right-[85px] text-xl"
+                className="absolute right-[60px] bottom-1/2 sm:right-[85px] text-xl"
               >
                 <ChevronRightIcon className="w-6 h-6 text-gray-600 opacity-70 hover:opacity-100 cursor-pointer" />
               </button>

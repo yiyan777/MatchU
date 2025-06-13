@@ -161,7 +161,8 @@ export default function Navbar({
             <img
               src={partner.avatarUrl}
               alt="對方頭像"
-              className="w-15 h-15 rounded-full object-cover "
+              className="w-15 h-15 rounded-full object-cover cursor-pointer"
+              onClick={() => router.push(`/users/${partner.uid}`)}
             />
             <div className="text-sm font-semibold text-gray-800">{partner.name}</div>
           </div>
