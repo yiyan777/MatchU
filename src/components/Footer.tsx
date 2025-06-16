@@ -9,6 +9,7 @@ export default function Footer({ className = "" }) {
     return (
         <footer 
             className={`
+            w-full z-100
             flex justify-center items-center py-10
             font-medium mt-10 h-auto border-t border-gray-300 
             text-gray-600 text-lg bottom-0 right-0 left-0 ${className}

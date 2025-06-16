@@ -65,13 +65,13 @@ export default function ProfilePage() {
           <>
             {/* 頭貼輪播容器：圖片 + 箭頭定位點 */}
             <div className="relative mx-auto mb-3">
-              <div className="relative w-28 h-44 rounded-md shadow-md mx-auto">
+              <div className="relative w-28 h-44 shadow-md mx-auto">
                 {userData.avatarUrls[currentIndex] ? (
                   <Image
                     src={userData.avatarUrls[currentIndex]}
                     alt="頭貼"
                     fill
-                    className="object-cover"
+                    className="object-cover rounded-lg"
                     unoptimized
                     priority
                   />

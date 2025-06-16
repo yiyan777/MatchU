@@ -16,8 +16,10 @@ import { dbRT } from "@/lib/firebase";
 
 export default function Navbar({
   partner,
+  matchId
 }: {
   partner?: {name:string; avatarUrl: string; uid?: string } | null;
+  matchId?: string | null;
 }) {
     useOnlineStatus();
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -95,7 +97,7 @@ export default function Navbar({
                 hover:brightness-110"
                 onClick={() => router.push("/chat")}
             >
-              聊天列表
+              配對列表
             </button>
           )}
 
@@ -108,6 +110,19 @@ export default function Navbar({
                 onClick= {()=> router.push("/profile")}
                 >
                   我的主頁
+            </button>
+          )}
+
+          {isLoggedIn &&  matchId && pathname.startsWith("/users/") && (
+            <button 
+              className="
+                text-sm rounded-full px-4 py-2 text-white cursor-pointer 
+                bg-gradient-to-l from-purple-500 to-pink-300
+                transition duration-300 ease-in-out
+                hover:brightness-110"
+              onClick={() => router.push(`/chat/${matchId}`)}
+              >
+                返回聊天
             </button>
           )}
 
@@ -162,6 +177,7 @@ export default function Navbar({
               src={partner.avatarUrl}
               alt="對方頭像"
               className="w-15 h-15 rounded-full object-cover cursor-pointer"
+              title={`查看${partner.name}的個人頁面`}
               onClick={() => router.push(`/users/${partner.uid}`)}
             />
             <div className="text-sm font-semibold text-gray-800">{partner.name}</div>
