@@ -77,9 +77,10 @@ export default function UserPage() {
   }
 
   return (
-    <div className="bg-[url('/users-bg.jpg')] bg-cover bg-repeat">
+    <div className="flex flex-col min-h-screen bg-[url('/users-bg.jpg')] bg-cover bg-top bg-repeat">
       <Navbar matchId={matchId} />
-      <div className="max-w-xs sm:max-w-lg mx-auto mt-20 p-6 bg-white shadow-lg rounded-2xl bg-white/90">
+      
+      <div className="max-w-xs sm:max-w-lg mx-auto mt-24 sm:mt-20 p-6 bg-white shadow-lg rounded-2xl bg-white/90">
         {userData.avatarUrls.length > 0 ? (
           <div className="w-[130px] mx-auto flex overflow-x-auto gap-4 pb-4">
             {userData.avatarUrls.map((url, index) => (
