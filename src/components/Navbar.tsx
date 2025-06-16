@@ -88,7 +88,7 @@ export default function Navbar({
 
     const buttons = (
       <>
-          {isLoggedIn && hasMatch &&(
+          {isLoggedIn && hasMatch && (pathname !== "/chat") &&(
             <button
               className="
                 text-sm rounded-full px-4 py-2 text-white cursor-pointer 
@@ -101,7 +101,8 @@ export default function Navbar({
             </button>
           )}
 
-          {isLoggedIn && (pathname === "/" || pathname === "/explore" || pathname === "/chat") && (
+          {isLoggedIn && (pathname === "/" || pathname === "/explore" || 
+            pathname.startsWith("/chat") || pathname.startsWith("/users/")) && (
             <button className="
                 text-sm rounded-full px-4 py-2 text-white cursor-pointer
                 bg-gradient-to-l from-purple-500 to-pink-300
@@ -162,7 +163,7 @@ export default function Navbar({
         </Link>
 
         {partner && (
-          <div className="flex items-center gap-2 sm:ml-[97px]">
+          <div className="flex items-center gap-2 md:ml-[180px]">
             {/* 線上狀態圓點 */}
             {partner?.uid && (
               <div 
@@ -185,12 +186,12 @@ export default function Navbar({
         )}
         
         {/* 桌機版按鈕 */}
-        <div className="hidden sm:flex gap-1">
+        <div className="hidden md:flex gap-1">
           {buttons}
         </div>
 
         {/* 手機版漢堡圖 */}
-        <div className="sm:hidden relative" ref={menuRef}>
+        <div className="md:hidden relative" ref={menuRef}>
           <button
             onClick={() => setMenuOpen(!menuOpen)}
             className="text-gray-700 focus:outline-none cursor-pointer mr-5"
