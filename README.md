@@ -50,9 +50,9 @@ npm install
 2. 設定環境變數 .env.local：
 
 ```env
-NEXT_PUBLIC_FIREBASE_API_KEY=你的API_KEY
-NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=你的AUTH_DOMAIN
-NEXT_PUBLIC_FIREBASE_PROJECT_ID=你的PROJECT_ID
+NEXT_PUBLIC_FIREBASE_API_KEY=MY_API_KEY
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=MY_AUTH_DOMAIN
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=MY_PROJECT_ID
 NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=...
 NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=...
 NEXT_PUBLIC_FIREBASE_APP_ID=...
@@ -80,7 +80,7 @@ npm run dev
 
 ## 專案目的與背景
 
-我想開發 MatchU 戀愛交友網站，是因為我本身是水象星座（巨蟹座），非常重視人與人之間的情感交流。因此，希望能透過自己的特質，打造一個溫暖、真誠的配對平台，讓使用者之間能有更深入的互動與連結。
+我想開發 MatchU 戀愛交友網站，是因為我本身是巨蟹座，重視家庭關係以及人與人之間的情感交流。因此，希望能透過自己的特質，打造一個溫暖、真誠的配對平台，讓使用者之間能有深入的互動與連結。
 
 本專案整合了 Next.js 與 Firebase 技術，實作一套具備配對邏輯與即時聊天功能的交友平台，並完成前後端整合與雲端部署。
 
