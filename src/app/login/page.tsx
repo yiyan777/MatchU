@@ -12,8 +12,8 @@ import Footer from "@/components/Footer";
 
 
 export default function LoginPage() {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const [email, setEmail] = useState("yiyan@gmail.com");
+    const [password, setPassword] = useState("123456");
     const [isLogin, setIsLogin] = useState(true); // 切換登入/註冊模式
     const [message, setMessage] = useState("");
     
