@@ -7,9 +7,10 @@ MatchU 是一個以 Next.js 和 Firebase 打造的現代化交友平台，使用
 ##  目錄
 
 - [主要功能](#主要功能)
+- [頁面預覽](#頁面預覽)
+- [流程圖](#流程圖)
 - [使用技術](#使用技術)
 - [開發與執行](#開發與執行)
-- [頁面預覽](#頁面預覽)
 - [專案目的與背景](#專案目的與背景)
 - [作者](#作者)
 - [上線網址](#上線網址)
@@ -24,6 +25,31 @@ MatchU 是一個以 Next.js 和 Firebase 打造的現代化交友平台，使用
 - 雙方互按喜歡即配對成功（Match 機制）
 - 即時聊天（Firestore + Realtime Database）
 - 支援上線狀態、未讀訊息、圖片傳送
+
+---
+
+## 頁面預覽
+
+### 首頁（登入頁面）
+使用者進入網站後，首先會看到登入／註冊頁面。透過 Firebase Authentication 實現帳號驗證機制，登入後可進入完整配對功能。
+![](./public/demo/index.png)
+
+### 個人主頁
+使用者可以查看並編輯個人資料，包括暱稱、自我介紹、興趣標籤、大頭貼等，資料儲存於 Firestore 和 Firebase Storage。
+![](./public/demo/profile.png)
+
+### Explore 搜尋頁面
+探索頁面會根據使用者性別推薦異性對象，每次顯示一位，使用者可以點擊like配對或next切換下一位。配對成功後可以進入配對列表以及聊天頁面。
+![](./public/demo/explore.png)
+
+### 聊天頁面
+與配對成功的對象進行即時聊天，支援文字、圖片、未讀訊息提示與上線狀態顯示。
+![](./public/demo/chat.png)
+
+---
+
+## 流程圖
+![](./public/demo/flowchart.png)
 
 ---
 
@@ -63,31 +89,6 @@ NEXT_PUBLIC_FIREBASE_APP_ID=...
 ```bash
 npm run dev
 ```
-
----
-
-## 頁面預覽
-
-### 首頁（登入頁面）
-使用者進入網站後，首先會看到登入／註冊頁面。透過 Firebase Authentication 實現帳號驗證機制，登入後可進入完整配對功能。
-![](./public/demo/index.png)
-
-### 個人主頁
-使用者可以查看並編輯個人資料，包括暱稱、自我介紹、興趣標籤、大頭貼等，資料儲存於 Firestore 和 Firebase Storage。
-![](./public/demo/profile.png)
-
-### Explore 搜尋頁面
-探索頁面會根據使用者性別推薦異性對象，每次顯示一位，使用者可以點擊like配對或next切換下一位。配對成功後可以進入配對列表以及聊天頁面。
-![](./public/demo/explore.png)
-
-### 聊天頁面
-與配對成功的對象進行即時聊天，支援文字、圖片、未讀訊息提示與上線狀態顯示。
-![](./public/demo/chat.png)
-
----
-
-## 流程圖
-![](./public/demo/flowchart.png)
 ---
 
 ## 專案目的與背景
