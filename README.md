@@ -100,7 +100,7 @@ MatchU 是一個以 Next.js 和 Firebase 打造的現代化交友平台，使用
 ![](./public/demo/skill-2/3.png)
 
 ### 三、使用正則表達式將使用者輸入的網址轉成超連結
-使用自訂函式 linkify()，搭配「正則表達式」，將網址轉換成超連結。
+自訂函式 linkify()，搭配「正則表達式」，將網址轉換成超連結。
 ![](./public/demo/skill-3/1.png)
 ![](./public/demo/skill-3/2.png)
 
