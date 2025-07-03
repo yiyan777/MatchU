@@ -11,6 +11,7 @@ MatchU 是一個以 Next.js 和 Firebase 打造的現代化交友平台，使用
 - [頁面預覽](#頁面預覽)
 - [流程圖](#流程圖)
 - [使用技術](#使用技術)
+- [技術重點說明](#技術重點說明)
 - [開發與執行](#開發與執行)
 - [專案目的與背景](#專案目的與背景)
 - [作者](#作者)
@@ -69,6 +70,16 @@ MatchU 是一個以 Next.js 和 Firebase 打造的現代化交友平台，使用
   - Realtime Database（上線狀態）
   - Firebase Auth（使用者驗證）
   - Firebase Storage（大頭貼上傳）
+
+---
+## 技術重點說明
+一、如何顯示雙方的聊天紀錄 & 畫出新訊息
+![](./public/demo/skill-1/1.png)
+![](./public/demo/skill-1/2.png)
+![](./public/demo/skill-1/3.png)
+![](./public/demo/skill-1/4.png)
+![](./public/demo/skill-1/5.png)
+![](./public/demo/skill-1/6.png)
 
 ---
 
