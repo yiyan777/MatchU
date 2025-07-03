@@ -19,6 +19,7 @@ MatchU 是一個以 Next.js 和 Firebase 打造的現代化交友平台，使用
 - [技術重點說明](#技術重點說明)
   - [1. 如何顯示雙方的聊天紀錄 & 畫出新訊息](#一如何顯示雙方的聊天紀錄--畫出新訊息)
   - [2. 使用自訂 hook-usehasmatch.ts](#二使用自訂-hook-useHasMatchts)
+  - [3. 使用「正則表達式」將使用者輸入的網址轉成超連結](#三使用正則表達式將使用者輸入的網址轉成超連結)
 - [開發與執行](#開發與執行)
 - [專案目的與背景](#專案目的與背景)
 - [作者](#作者)
@@ -93,9 +94,15 @@ MatchU 是一個以 Next.js 和 Firebase 打造的現代化交友平台，使用
 ![](./public/demo/skill-1/6.png)
 
 ### 二、使用自訂 Hook - useHasMatch.ts
+利用自訂 Hook - useHasMach 來管理使用者的配對狀態
 ![](./public/demo/skill-2/1.png)
 ![](./public/demo/skill-2/2.png)
 ![](./public/demo/skill-2/3.png)
+
+### 三、使用正則表達式將使用者輸入的網址轉成超連結
+使用自訂函式 linkify()，搭配「正則表達式」，將網址轉換成超連結。
+![](./public/demo/skill-3/1.png)
+![](./public/demo/skill-3/2.png)
 
 ---
 
