@@ -84,7 +84,7 @@ MatchU 是一個以 Next.js 和 Firebase 打造的現代化交友平台，使用
 - **UI 工具**：Tailwind CSS、Heroicons
 - **後端服務**：Firebase
   - Firestore（聊天訊息、使用者資料）
-  - Realtime Database（上線狀態）
+  - Realtime Database（在線狀態管理）
   - Firebase Auth（使用者驗證）
   - Firebase Storage（大頭貼上傳）
 
