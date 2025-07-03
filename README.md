@@ -9,15 +9,16 @@ MatchU 是一個以 Next.js 和 Firebase 打造的現代化交友平台，使用
 - [主要功能](#主要功能)
 - [使用者故事](#使用者故事)
 - [頁面預覽](#頁面預覽)
- - [首頁（登入頁面）](#首頁登入頁面)
+  - [首頁（登入頁面）](#首頁登入頁面)
   - [個人主頁](#個人主頁)
   - [Explore搜尋頁面](#Explore搜尋頁面)
   - [配對列表](#配對列表)
   - [聊天頁面](#聊天頁面)
-
 - [流程圖](#流程圖)
 - [使用技術](#使用技術)
 - [技術重點說明](#技術重點說明)
+  - [1.如何顯示雙方的聊天紀錄 & 畫出新訊息](#一如何顯示雙方的聊天紀錄--畫出新訊息)
+  - [2.使用自訂-hook---usehasmatch.ts](#二使用自訂-hook---usehasmatchts)
 - [開發與執行](#開發與執行)
 - [專案目的與背景](#專案目的與背景)
 - [作者](#作者)
@@ -83,7 +84,7 @@ MatchU 是一個以 Next.js 和 Firebase 打造的現代化交友平台，使用
 
 ---
 ## 技術重點說明
-一、如何顯示雙方的聊天紀錄 & 畫出新訊息
+### 一、如何顯示雙方的聊天紀錄 & 畫出新訊息
 ![](./public/demo/skill-1/1.png)
 ![](./public/demo/skill-1/2.png)
 ![](./public/demo/skill-1/3.png)
@@ -91,7 +92,7 @@ MatchU 是一個以 Next.js 和 Firebase 打造的現代化交友平台，使用
 ![](./public/demo/skill-1/5.png)
 ![](./public/demo/skill-1/6.png)
 
-二、使用自訂 Hook - useHasMatch.ts
+### 二、使用自訂 Hook - useHasMatch.ts
 ![](./public/demo/skill-2/1.png)
 ![](./public/demo/skill-2/2.png)
 ![](./public/demo/skill-2/3.png)
