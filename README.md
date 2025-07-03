@@ -80,7 +80,7 @@ MatchU 是一個以 Next.js 和 Firebase 打造的現代化交友平台，使用
 
 ## 使用技術
 
-- **前端框架**：Next.js 14 (App Router) + TypeScript
+- **前端框架**：Next.js 14 (App Router) + React + TypeScript
 - **UI 工具**：Tailwind CSS、Heroicons
 - **後端服務**：Firebase
   - Firestore（聊天訊息、使用者資料）
