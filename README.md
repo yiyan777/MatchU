@@ -50,6 +50,10 @@ MatchU 是一個以 Next.js 和 Firebase 打造的現代化交友平台，使用
 探索頁面會根據使用者性別推薦異性對象，每次顯示一位，使用者可以點擊like配對或next切換下一位。配對成功後可以進入配對列表以及聊天頁面。
 ![](./public/demo/explore.png)
 
+### 配對列表
+所有配對成功的對象皆會顯示於此，可以查看對方目前是否在線上，以及是否有未讀之訊息。
+![](./public/demo/matchList.png)
+
 ### 聊天頁面
 與配對成功的對象進行即時聊天，支援文字、圖片、未讀訊息提示與上線狀態顯示。
 ![](./public/demo/chat.png)
@@ -80,6 +84,11 @@ MatchU 是一個以 Next.js 和 Firebase 打造的現代化交友平台，使用
 ![](./public/demo/skill-1/4.png)
 ![](./public/demo/skill-1/5.png)
 ![](./public/demo/skill-1/6.png)
+
+二、使用自訂 Hook - useHasMatch.ts
+![](./public/demo/skill-2/1.png)
+![](./public/demo/skill-2/2.png)
+![](./public/demo/skill-2/3.png)
 
 ---
 
